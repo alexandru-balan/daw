@@ -25,6 +25,8 @@ namespace YahooGroups.Models
         {
         }
 
+        public DbSet<CategoryModel> Categories { get; set; }
+
         public static ApplicationDbContext Create()
         {
             return new ApplicationDbContext();

@@ -1,0 +1,19 @@
+﻿@model YahooGroups.Models.CategoryModel
+
+@{
+    ViewBag.Title = "Edit category";
+}
+
+<h2>@ViewBag.Title</h2>
+
+<form method="put" action="/Category/Edit/@Model">
+    @Html.HttpMethodOverride(HttpVerbs.Put)
+
+    @Html.HiddenFor(model => model.CategoryId)
+
+    @Html.LabelFor(model => model.Name, "Category Name")
+
+    @Html.EditorFor(model => model.Name)
+
+    <button type="submit" class="btn">Update category info</button>
+</form>

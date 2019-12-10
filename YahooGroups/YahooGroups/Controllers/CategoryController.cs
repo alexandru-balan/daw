@@ -82,6 +82,7 @@ namespace YahooGroups.Controllers
             return View(Category);
         }
 
+        [HttpPut]
         public ActionResult Edit(CategoryModel category)
         {
             var categoryToBeChanged = db.Categories.Find(category.CategoryId);

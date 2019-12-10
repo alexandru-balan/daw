@@ -1,0 +1,19 @@
+﻿@model YahooGroups.Models.CategoryModel
+
+@{
+    ViewBag.Title = "Add a new category";
+}
+
+<h2>@ViewBag.Title</h2>
+
+<form method="get" action="/Category/New/@Model">
+    @Html.HttpMethodOverride(HttpVerbs.Post)
+
+    @Html.HiddenFor(model => model.CategoryId)
+
+    @Html.Label("Name", "Category Name")
+
+    @Html.EditorFor(model => model.Name)
+
+    <button type="submit" class="btn">Create category</button>
+</form>

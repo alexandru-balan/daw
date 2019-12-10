@@ -1,0 +1,11 @@
+﻿
+@{
+    ViewBag.Title = "All Categories";
+}
+
+<h2>@ViewBag.Title</h2>
+
+@foreach (YahooGroups.Models.CategoryModel category in ViewBag.Categories)
+{
+    @Html.Partial("DisplayCategoryPartialView", category)
+}

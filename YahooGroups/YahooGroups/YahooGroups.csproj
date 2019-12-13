@@ -353,7 +353,7 @@
     <Content Include="Views\Category\Show.cshtml" />
     <Content Include="Views\Category\New.cshtml" />
     <Content Include="Views\Category\Edit.cshtml" />
-    <Content Include="Views\Category\EditNoEnt.cshtml" />
+    <Content Include="Views\Category\ErrNoEnt.cshtml" />
     <Content Include="Views\Category\Delete.cshtml" />
   </ItemGroup>
   <ItemGroup>

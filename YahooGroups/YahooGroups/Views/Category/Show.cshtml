@@ -6,7 +6,13 @@
 
 <div class="flex-row">
     <a class="btn" href="/Category/Edit/@Model.CategoryId">Edit this category</a>
-    <a class="btn btn-danger" href="/Category/Delete/@Model.CategoryId">Delete this category</a>
+
+    <form method="post", action="/Category/Delete/@Model.CategoryId">
+
+        @Html.HttpMethodOverride(HttpVerbs.Delete)
+
+        <button class="btn btn-danger" type="submit">Delete this category</button>
+    </form>
 </div>
 
 <!-- Now display all groups in this category -->

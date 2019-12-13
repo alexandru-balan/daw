@@ -6,8 +6,9 @@
 
 <h2>@ViewBag.Title</h2>
 
-<form method="get" action="/Category/New/@Model">
-    @Html.HttpMethodOverride(HttpVerbs.Post)
+<form method="post" action="/Category/New">
+
+    @Html.ValidationSummary(false, "", new { @class = "text-danger" })
 
     @Html.HiddenFor(model => model.CategoryId)
 

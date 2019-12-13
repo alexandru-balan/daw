@@ -30,6 +30,7 @@ namespace YahooGroups.Controllers
             if (Category == null)
             {
                 TempData["message"] = "The requested category could not be found!";
+                return View("ErrNoEnt");
             }
 
             return View(Category);
@@ -74,7 +75,7 @@ namespace YahooGroups.Controllers
             {
                 TempData["message"] = "Cannot edit categoy which does not exist!";
 
-                return View("EditNoEnt");
+                return View("ErrNoEnt");
             }
 
             ViewBag.categoryId = categoryId;
@@ -83,9 +84,9 @@ namespace YahooGroups.Controllers
         }
 
         [HttpPut]
-        public ActionResult Edit(CategoryModel category)
+        public ActionResult Edit(int categoryId, CategoryModel category)
         {
-            var categoryToBeChanged = db.Categories.Find(category.CategoryId);
+            var categoryToBeChanged = db.Categories.Find(categoryId);
 
             try
             {
@@ -97,7 +98,7 @@ namespace YahooGroups.Controllers
                         db.SaveChanges();
                         TempData["message"] = "Category updated successfully!";
                     }
-                    return RedirectToAction("Show", "Category", categoryToBeChanged.CategoryId);
+                    return RedirectToAction("Show", new { categoryId = categoryId });
                 }
                 else
                 {

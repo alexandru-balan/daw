@@ -21,7 +21,7 @@ namespace YahooGroups
 
             routes.MapRoute(
                 name: "CategoryShow",
-                url: "{controller}/{action}/{id}",
+                url: "{controller}/{action}/{categoryId}",
                 defaults: new { controller = "Category", action = "Show" }
             );
 
@@ -45,7 +45,7 @@ namespace YahooGroups
 
             routes.MapRoute(
                 name: "CategoryEditPUT",
-                url: "{controller}/{action}/{category}",
+                url: "{controller}/{action}/{categoryId}/{category}",
                 defaults: new { controller = "Category", action = "Edit" }
             );
 
@@ -57,7 +57,7 @@ namespace YahooGroups
 
             routes.MapRoute(
                 name: "CategoryDelete",
-                url: "{controller}/{action}/{id}",
+                url: "{controller}/{action}/{categoryId}",
                 defaults: new { controller = "Category", action = "Delete" }
             );
 

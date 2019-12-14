@@ -57,20 +57,23 @@ namespace YahooGroups
                 }
             }
 
-            // Rolul de utilizator neinregistrat
-            if (!roleManager.RoleExists("unregistered"))
-            {
-                var role = new IdentityRole();
-                role.Name = "unregistered";
-                roleManager.Create(role);
-            }
-
             // Rolul de utilizator inregistrat
             if (!roleManager.RoleExists("user"))
             {
                 var role = new IdentityRole();
                 role.Name = "user";
                 roleManager.Create(role);
+
+                var user = new ApplicationUser();
+
+                user.Email = "user@user.com";
+                user.UserName = "user@user.com";
+
+                var created = userManager.Create(user, "User1!");
+                if (created.Succeeded)
+                {
+                    userManager.AddToRole(user.Id, "user");
+                }
             }
 
             // Rolul de moderator
@@ -79,6 +82,18 @@ namespace YahooGroups
                 var role = new IdentityRole();
                 role.Name = "moderator";
                 roleManager.Create(role);
+
+                var moderator = new ApplicationUser();
+
+                moderator.Email = "moderator@moderator.com";
+                moderator.UserName = "moderator@moderator.com";
+
+                var created = userManager.Create(moderator, "Moderator1!");
+
+                if (created.Succeeded)
+                {
+                    userManager.AddToRole(moderator.Id, "moderator");
+                }
             }
         }
     }

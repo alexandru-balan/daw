@@ -8,7 +8,7 @@ namespace YahooGroups.Controllers
 {
     public class GroupController : Controller
     {
-        private GroupDBContext db = new GroupDBContext();
+        private ApplicationDbContext db = new ApplicationDbContext();
         
         public ActionResult Index()
         {

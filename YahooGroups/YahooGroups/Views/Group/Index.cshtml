@@ -8,9 +8,9 @@
 <from method="post" action="/Group/Index">s
     @foreach (var gr in ViewBag.Groups)
     {
-        @Html.Label("GroupName", "Denumire Grup")
-        <p>@gr.GroupName</p>
-        <a class="btn btn-success" href="/Group/Show/@gr.GroupId">Afisare grup</a>
+        @Html.Label("groupName", "Denumire Grup")
+        <p>@gr.groupName</p>
+        <a class="btn btn-success" href="/Group/Show/@gr.groupId">Afisare grup</a>
 
     }
 </from>

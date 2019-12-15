@@ -504,7 +504,7 @@
         }
       }
 
-      if (!(this._element.hasAttribute('disabled') || this._element.classList.contains('disabled'))) {
+      if (!(this._element.hasAttribute('disabled') || this._element.classList.contains('disabled'))){
         if (addAriaPressed) {
           this._element.setAttribute('aria-pressed', !this._element.classList.contains(ClassName$1.ACTIVE));
         }

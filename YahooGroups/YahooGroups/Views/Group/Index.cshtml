@@ -1,0 +1,16 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Index</h2>
+
+<from method="post" action="/Group/Index">s
+    @foreach (var gr in ViewBag.Groups)
+    {
+        @Html.Label("GroupName", "Denumire Grup")
+        <p>@gr.GroupName</p>
+        <a class="btn btn-success" href="/Group/Show/@gr.GroupId">Afisare grup</a>
+
+    }
+</from>

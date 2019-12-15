@@ -1,0 +1,16 @@
+﻿@using YahooGroups.Models
+@model GroupModels
+@{
+    ViewBag.Title = "CreateGroup";
+}
+
+<h2>@ViewBag.Title</h2>
+<form method="post" action="/Group/CreateGroup">
+    @Html.Label("GroupName", "Group Name")
+    <br />
+    @Html.TextBox("GroupName", null, new { @class = "form-control" })
+    <br /><br />
+
+    <button class="btn btn-success" type="submit">Create Group</button>
+</form>
+

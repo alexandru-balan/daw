@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -17,14 +18,25 @@ namespace YahooGroups.Controllers
         public ActionResult Index()
         {
             var users = from user in db.Users orderby user.Id select user;
+            var Users = users.ToList();
+            ArrayList Roles = new ArrayList();
+            foreach (var user in Users)
+            {
+                foreach (var role in user.Roles)
+                {
+                    var userRole = db.Roles.Find(role.RoleId).Name; // The actual names of the roles
+                    Roles.Add(userRole);
+                }
+            }
 
+            ViewBag.Roles = Roles;
             ViewBag.Users = users;
 
             return View();
         }
 
         [HttpGet]
-        public ActionResult Show(int userId)
+        public ActionResult Show(string userId)
         {
             var user = db.Users.Find(userId);
 
@@ -38,7 +50,7 @@ namespace YahooGroups.Controllers
         }
 
         [HttpPut]
-        public ActionResult MakeModerator (int userId)
+        public ActionResult MakeModerator (string userId)
         {
             var user = db.Users.Find(userId);
             var UserRole = from role in db.Roles where role.Name == "user" select role; // Get user role
@@ -68,7 +80,7 @@ namespace YahooGroups.Controllers
         }
 
         [HttpPut]
-        public ActionResult RevokeModerator (int userId)
+        public ActionResult RevokeModerator (string userId)
         {
             var user = db.Users.Find(userId);
             var UserRole = from role in db.Roles where role.Name == "user" select role; // Get user role
@@ -101,7 +113,7 @@ namespace YahooGroups.Controllers
         }
 
         [HttpPut]
-        public ActionResult MakeAdmin(int userId)
+        public ActionResult MakeAdmin(string userId)
         {
             var user = db.Users.Find(userId);
             var UserRole = from role in db.Roles where role.Name == "user" select role; // Get user role
@@ -161,7 +173,7 @@ namespace YahooGroups.Controllers
         }
 
         [HttpDelete]
-        public ActionResult Delete(int userId)
+        public ActionResult Delete(string userId)
         {
             // Check if the given user is an admin. You shouldn't be able to delete an admin account
             var user = db.Users.Find(userId);

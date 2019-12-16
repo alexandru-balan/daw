@@ -17,11 +17,7 @@ namespace YahooGroups.Models
         [Required]
         public int moderatorId { get; set; }
         public virtual ICollection<ApplicationUser> ApplicationUser { get; set; }
-    }
-    public class GroupDBContext: DbContext
-    {
-        public GroupDBContext()
-        { }
-        public DbSet<GroupModels> Groups { get; set; }
+        public CategoryModel Category { get; set; }
+        public bool privateGroup { get; set; }
     }
 }

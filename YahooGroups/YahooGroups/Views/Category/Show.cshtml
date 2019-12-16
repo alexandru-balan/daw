@@ -15,5 +15,12 @@
     </form>
 </div>
 
-<!-- Now display all groups in this category -->
-<!-- TO DO -->
+@foreach (var group in Model.Groups)
+{
+    <h2>@group.groupName</h2>
+    <hr />
+    <p>@group.groupDescripiton</p>
+    <br />
+ 
+    <a class="btn" href="/Group/Show/@group.groupId">View Group</a>
+}

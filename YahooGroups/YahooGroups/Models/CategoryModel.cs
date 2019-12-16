@@ -14,6 +14,6 @@ namespace YahooGroups.Models
         [Key]
         public int CategoryId { get; set; }
 
-        // A list of groups that belong to this category
+        public virtual ICollection<GroupModels> Groups { get; set; }
     }
 }

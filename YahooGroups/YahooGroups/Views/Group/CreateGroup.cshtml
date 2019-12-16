@@ -10,7 +10,10 @@
     <br />
     @Html.TextBox("GroupName", null, new { @class = "form-control" })
     <br /><br />
-
+    @Html.Label("GroupDescription","Group Description")
+    <br />
+    @Html.TextBox("GroupDescription", null, new{@class = "form-control"})
+    <br/><br/>
     <button class="btn btn-success" type="submit">Create Group</button>
 </form>
 

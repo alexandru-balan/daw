@@ -1,0 +1,30 @@
+﻿
+@{
+    ViewBag.Title = "Show";
+}
+
+<h2>Show</h2>
+
+<p>@Model.GroupName</p>
+@using (Html.BeginForm(actionName: "Delete", controllerName: "Group", routeValues: new { id = @Model.GroupId }))
+{
+
+    @Html.HttpMethodOverride(HttpVerbs.Delete)
+
+    <button class="btn btn-success" type="submit">Sterge grupul</button>
+}
+<br />
+<a class="btn btn-success" href="/Group/Index/">Afisare lista grupuri</a>
+
+<br />
+@foreach (var user in ViewBag.Users)
+{
+    if (user.GroupModels_groupId == Model.GroupId)
+    {
+        <p>@user.UserName</p>
+        <button class="btn btn-success" type="submit">Elimina din grup</button>
+    }
+
+}
+<hr />
+<br />

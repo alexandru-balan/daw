@@ -32,6 +32,21 @@ namespace YahooGroups.Controllers
         {
             return View();
         }
+        public ActionResult Delete(int id)
+        {
+            GroupModels gr = db.Groups.Find(id);
+            if(gr.moderatorId == User.GetHashCode())
+            {
+                TempData["message"] = "Grupul a fost sters";
+                db.SaveChanges();
+                return RedirectToAction("Index");
+            }
+            else
+            {
+                TempData["message"] = "Nu ai dreptul sa stergi acest grup";
+                return RedirectToAction("Index");
+            }
+        }
         [Authorize]
         public ActionResult CreateGroup()
         {
@@ -42,7 +57,6 @@ namespace YahooGroups.Controllers
         {
             try
             {
-                Console.Write(Gr);
                 db.Groups.Add(Gr);
                 db.SaveChanges();
                 TempData["message"] = "Grupul a fost adaugat!";
@@ -54,7 +68,7 @@ namespace YahooGroups.Controllers
                 TempData["message"] = e.ToString();
                 return RedirectToAction("Index");
             }
-            }
+        }
         [NonAction]
         public IEnumerable<SelectListItem> GetAllGroups()
         {

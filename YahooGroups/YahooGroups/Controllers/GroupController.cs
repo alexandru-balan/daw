@@ -18,10 +18,9 @@ namespace YahooGroups.Controllers
                 ViewBag.message = TempData["message"].ToString();
             }
 
-            var groups = from gr in db.Groups
-                             orderby gr.groupName
-                             select gr;
-            ViewBag.Groups = groups;
+            var groups = from gr in db.Groups select gr;
+
+            ViewBag.Groups = groups.ToList();
 
             bool IsLogedIn = false;
 
@@ -34,11 +33,20 @@ namespace YahooGroups.Controllers
 
             return View();
         }
+
+        [HttpGet]
         public ActionResult Show(int id)
         {
             GroupModels group = db.Groups.Find(id);
+            var moderator = db.Users.Find(group.moderatorId);
+
+            ViewBag.Moderator = moderator.UserName;
+            ViewBag.Users = group.Users;
+
             return View(group);
         }
+
+        [HttpDelete]
         public ActionResult Delete(int id)
         {
             GroupModels gr = db.Groups.Find(id);

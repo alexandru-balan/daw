@@ -36,9 +36,9 @@ namespace YahooGroups.Controllers
         }
 
         [HttpGet]
-        public ActionResult Show(string userId)
+        public ActionResult Show(string id)
         {
-            var user = db.Users.Find(userId);
+            var user = db.Users.Find(id);
 
             if (user == null)
             {

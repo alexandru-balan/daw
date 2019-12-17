@@ -67,9 +67,9 @@ namespace YahooGroups.Controllers
         }
 
         [HttpGet]
-        public ActionResult Edit(int categoryId)
+        public ActionResult Edit(int id)
         {
-            var Category = db.Categories.Find(categoryId);
+            var Category = db.Categories.Find(id);
 
             if (Category == null)
             {
@@ -78,7 +78,7 @@ namespace YahooGroups.Controllers
                 return View("ErrNoEnt");
             }
 
-            ViewBag.categoryId = categoryId;
+            ViewBag.categoryId = id;
 
             return View(Category);
         }
@@ -113,9 +113,9 @@ namespace YahooGroups.Controllers
         }
 
         [HttpDelete]
-        public ActionResult Delete (int categoryId)
+        public ActionResult Delete (int id)
         {
-            var Category = db.Categories.Find(categoryId);
+            var Category = db.Categories.Find(id);
 
             if (Category == null)
             {

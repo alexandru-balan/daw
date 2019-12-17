@@ -362,6 +362,8 @@
     <Content Include="Views\Group\CreateGroup.cshtml" />
     <Content Include="Views\Group\Index.cshtml" />
     <Content Include="Views\Identity\Index.cshtml" />
+    <Content Include="Views\Group\Delete.cshtml" />
+    <Content Include="Views\Group\Show.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <TypeScriptCompile Include="Scripts\index.d.ts" />

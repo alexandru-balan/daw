@@ -1,16 +1,22 @@
-﻿
-@{
-    ViewBag.Title = "Index";
+﻿@{
+    ViewBag.Title = "Groups";
 }
 
-<h2>Index</h2>
+<h2>@ViewBag.Title</h2>
+<hr />
 
-<from method="post" action="/Group/Index">s
-    @foreach (var gr in ViewBag.Groups)
+<from method="post" action="/Group/Index">
+    @foreach (var group in ViewBag.Groups)
     {
-        @Html.Label("groupName", "Denumire Grup")
-        <p>@gr.groupName</p>
-        <a class="btn btn-success" href="/Group/Show/@gr.groupId">Afisare grup</a>
-        <button class="btn btn-success" type="submit">Inscrie-te in grup</button>
+        //@Html.Label("groupName", "Denumire Grup")
+        <p>@group.groupName</p>
+        <a class="btn btn-success" href="/Group/Show/@group.groupId">View group</a>
+        <button class="btn btn-success" type="submit">Join this group</button>
     }
 </from>
+<br />
+<br />
+@if (ViewBag.IsLogedIn)
+{
+    <a class="btn" href="/Group/CreateGroup">Create group</a>
+}

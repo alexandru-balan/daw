@@ -1,4 +1,5 @@
-﻿using System.Data.Entity;
+﻿using System.Collections.Generic;
+using System.Data.Entity;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNet.Identity;
@@ -16,6 +17,8 @@ namespace YahooGroups.Models
             // Add custom user claims here
             return userIdentity;
         }
+
+        public virtual ICollection<GroupModels> Groups { get; set; }
     }
 
     public class ApplicationDbContext : IdentityDbContext<ApplicationUser>

@@ -62,6 +62,24 @@ namespace YahooGroups
             );
 
             routes.MapRoute(
+                name: "GroupIndex",
+                url: "{controller}/{action}",
+                defaults: new { controller = "Group", action = "Index" }
+            );
+
+            routes.MapRoute(
+               name: "GroupCreateGET",
+               url: "{controller}/{action}",
+               defaults: new { controller = "Group", action = "CreateGroup" }
+            );
+
+            routes.MapRoute(
+               name: "GroupCreatePOST",
+               url: "{controller}/{action}/{group}",
+               defaults: new { controller = "Group", action = "CreateGroup" }
+            );
+
+            routes.MapRoute(
                 name: "IdentityIndex",
                 url: "{controller}/{action}",
                 defaults: new { controller = "Identity", action = "Index" }

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.AspNet.Identity;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -21,21 +22,27 @@ namespace YahooGroups.Controllers
                              orderby gr.groupName
                              select gr;
             ViewBag.Groups = groups;
+
+            bool IsLogedIn = false;
+
+            if (User.IsInRole("user") || User.IsInRole("moderator") || User.IsInRole("admin"))
+            {
+                IsLogedIn = true;
+            }
+
+            ViewBag.IsLogedIn = IsLogedIn;
+
             return View();
         }
         public ActionResult Show(int id)
         {
-            GroupModels gr = db.Groups.Find(id);
-            return View(gr);
-        }
-        public ActionResult New()
-        {
-            return View();
+            GroupModels group = db.Groups.Find(id);
+            return View(group);
         }
         public ActionResult Delete(int id)
         {
             GroupModels gr = db.Groups.Find(id);
-            if(gr.moderatorId == User.GetHashCode())
+            if(gr.moderatorId == User.Identity.GetUserId())
             {
                 TempData["message"] = "Grupul a fost sters";
                 db.SaveChanges();
@@ -47,17 +54,26 @@ namespace YahooGroups.Controllers
                 return RedirectToAction("Index");
             }
         }
-        [Authorize]
+
+        [Authorize(Roles = "user,moderator,admin")]
         public ActionResult CreateGroup()
         {
-            return View();
+            var group = new GroupModels();
+
+            group.moderatorId = User.Identity.GetUserId();
+
+            ViewBag.Categories = GetAllCategories();
+
+            return View(group);
         }
+        
+        [Authorize(Roles = "user,moderator,admin")]
         [HttpPost]
-        public ActionResult CreateGroup(GroupModels Gr)
+        public ActionResult CreateGroup(GroupModels group)
         {
             try
             {
-                db.Groups.Add(Gr);
+                db.Groups.Add(group);
                 db.SaveChanges();
                 TempData["message"] = "Grupul a fost adaugat!";
                 return RedirectToAction("Index");
@@ -66,25 +82,26 @@ namespace YahooGroups.Controllers
             {
 
                 TempData["message"] = e.ToString();
-                return RedirectToAction("Index");
+                return View(group);
             }
         }
+
         [NonAction]
-        public IEnumerable<SelectListItem> GetAllGroups()
+        public IEnumerable<SelectListItem> GetAllCategories()
         {
             // generam o lista goala
             var selectList = new List<SelectListItem>();
 
             
-            var groups = from gr in db.Groups
-                             select gr;
-            foreach (var group in groups)
+            var categories = from category in db.Categories
+                             select category;
+            foreach (var category in categories)
             {
                 // Adaugam in lista elementele necesare pentru dropdown
                 selectList.Add(new SelectListItem
                 {
-                    Value = group.groupId.ToString(),
-                    Text = group.groupName.ToString()
+                    Value = category.CategoryId.ToString(),
+                    Text = category.Name.ToString()
                 });
             }
             return selectList;

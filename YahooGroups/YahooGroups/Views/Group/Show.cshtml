@@ -1,25 +1,24 @@
-﻿
-@{
-    ViewBag.Title = "Show";
-}
+﻿@model YahooGroups.Models.GroupModels
 
-<h2>Show</h2>
+<h1>@Model.groupName</h1>
+<em>Moderator: @ViewBag.Moderator</em>
+<p>@Model.groupDescripiton</p>
+<hr />
 
-<p>@Model.GroupName</p>
-@using (Html.BeginForm(actionName: "Delete", controllerName: "Group", routeValues: new { id = @Model.GroupId }))
+@using (Html.BeginForm(actionName: "Delete", controllerName: "Group", routeValues: new { id = @Model.groupId }))
 {
 
     @Html.HttpMethodOverride(HttpVerbs.Delete)
 
-    <button class="btn btn-success" type="submit">Sterge grupul</button>
+    <button class="btn btn-danger" type="submit">Delete group</button>
 }
 <br />
-<a class="btn btn-success" href="/Group/Index/">Afisare lista grupuri</a>
+<a class="btn btn-success" href="/Group/Index/">Show all groups</a>
 
 <br />
 @foreach (var user in ViewBag.Users)
 {
-    if (user.GroupModels_groupId == Model.GroupId)
+    if (user == Model.groupId)
     {
         <p>@user.UserName</p>
         <button class="btn btn-success" type="submit">Elimina din grup</button>

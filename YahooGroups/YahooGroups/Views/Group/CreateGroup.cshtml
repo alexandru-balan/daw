@@ -9,16 +9,19 @@
 
 <form method="post" action="/Group/CreateGroup/@ViewBag.ModeratorId">
 
+    @Html.HiddenFor(model => model.groupId)
+    @Html.HiddenFor(model => model.moderatorId)
+
     @Html.ValidationSummary(false, "", new { @class = "text-danger" })
 
-    @Html.Label("GroupName", "Group Name")
+    @Html.LabelFor(model => model.groupName)
     <br />
-    @Html.TextBox("GroupName", null, new { @class = "form-control" })
+    @Html.EditorFor(model => model.groupName)
     <br /><br />
 
-    @Html.Label("GroupDescription", "Group Description")
+    @Html.LabelFor(model => model.groupDescripiton)
     <br />
-    @Html.TextBox("GroupDescription", null, new { @class = "form-control" })
+    @Html.EditorFor(model => model.groupDescripiton)
     <br /><br />
 
     @Html.LabelFor(model => model.privateGroup)

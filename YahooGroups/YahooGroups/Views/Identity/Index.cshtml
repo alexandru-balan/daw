@@ -1,0 +1,21 @@
+﻿@{
+    ViewBag.Title = "Users on the platform";
+    int i = 0;
+}
+
+<h1>@ViewBag.Title</h1>
+<hr />
+
+@foreach (var user in ViewBag.Users)
+{
+    <div class="flex-row justify-content-between d-flex">
+        <div class="d-flex flex-row align-items-center">
+            <h3>@user.UserName: </h3>
+            <span class="m-3">@ViewBag.Roles[i]</span>
+            @{i += 1;}
+        </div>
+        <a class="btn" href="/Identity/Show/@user.Id">Show user</a>
+    </div>
+    <br />
+    <br />
+}

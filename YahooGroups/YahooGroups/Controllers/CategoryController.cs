@@ -23,9 +23,9 @@ namespace YahooGroups.Controllers
         }
 
         [HttpGet]
-        public ActionResult Show(int categoryId)
+        public ActionResult Show(int id)
         {
-            var Category = db.Categories.Find(categoryId);
+            var Category = db.Categories.Find(id);
 
             if (Category == null)
             {
@@ -84,9 +84,9 @@ namespace YahooGroups.Controllers
         }
 
         [HttpPut]
-        public ActionResult Edit(int categoryId, CategoryModel category)
+        public ActionResult Edit(int id, CategoryModel category)
         {
-            var categoryToBeChanged = db.Categories.Find(categoryId);
+            var categoryToBeChanged = db.Categories.Find(id);
 
             try
             {
@@ -98,7 +98,7 @@ namespace YahooGroups.Controllers
                         db.SaveChanges();
                         TempData["message"] = "Category updated successfully!";
                     }
-                    return RedirectToAction("Show", new { categoryId = categoryId });
+                    return RedirectToAction("Show", new { categoryId = id });
                 }
                 else
                 {

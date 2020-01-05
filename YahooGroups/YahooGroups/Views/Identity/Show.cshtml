@@ -26,7 +26,64 @@
         }
     </div>
 }
+<br />
+<hr />
 
-<form>
+@if (ViewBag.Role == "moderator")
+{
+    <form method="post" action="/Identity/RevokeModerator/@Model.Id">
+        @Html.HttpMethodOverride(HttpVerbs.Put)
 
-</form>
+        <button class="btn btn-danger" type="submit">Revoke global moderator rights</button>
+    </form>
+    <br />
+
+    <form method="post" action="/Identity/MakeAdmin/Model.Id">
+        @Html.HttpMethodOverride(HttpVerbs.Put)
+
+        <button class="btn btn-success" type="submit">Grant admin right</button>
+    </form>
+    <br />
+
+    <form method="post" action="/Identity/Delete/@Model.Id">
+        @Html.HttpMethodOverride(HttpVerbs.Delete)
+
+        <button class="btn btn-danger" type="submit">Delete User</button>
+    </form>
+}
+
+@if (ViewBag.Role == "user")
+{
+    <form method="post" action="/Identity/MakeModerator/@Model.Id">
+        @Html.HttpMethodOverride(HttpVerbs.Put)
+
+        <button class="btn btn-success" type="submit">Grant global moderator rights</button>
+    </form>
+    <br />
+
+    <form method="post" action="/Identity/MakeAdmin/@Model.Id">
+        @Html.HttpMethodOverride(HttpVerbs.Put)
+
+        <button class="btn btn-success" type="submit">Grant admin right</button>
+    </form>
+    <br />
+
+    <form method="post" action="/Identity/Delete/@Model.Id">
+        @Html.HttpMethodOverride(HttpVerbs.Delete)
+
+        <button class="btn btn-danger" type="submit">Delete User</button>
+    </form>
+}
+
+@{
+    /*@if (ViewBag.Role == "admin")
+    {
+        <form method="post" action="/Identity/RevokeAdmin/@Model.Id">
+            @Html.HttpMethodOverride(HttpVerbs.Put)
+
+            <button class="btn btn-danger" type="submit">Revoke admin rights</button>
+        </form>
+        <br />
+    }*/
+}
+

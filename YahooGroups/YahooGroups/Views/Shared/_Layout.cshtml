@@ -20,6 +20,7 @@
                 @if (ViewBag.UserRole == "admin")
                 {
                     <li class="nav-item">@Html.ActionLink("View Categories", "Index", "Category", new { }, new { @class = "nav-link" })</li>
+                    <li class="nav-item">@Html.ActionLink("Manage Users", "Index", "Identity", new { }, new { @class = "nav-link" })</li>
                 }
             </ul>
             @Html.Partial("_LoginPartial")

@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Microsoft.AspNet.Identity;
+using Microsoft.AspNet.Identity.EntityFramework;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -32,6 +34,8 @@ namespace YahooGroups.Controllers
             ViewBag.Roles = Roles;
             ViewBag.Users = users;
 
+            ViewBag.UserRole = "admin";
+
             return View();
         }
 
@@ -39,6 +43,9 @@ namespace YahooGroups.Controllers
         public ActionResult Show(string id)
         {
             var user = db.Users.Find(id);
+            var roleId = user.Roles.First().RoleId;
+
+            var role = db.Roles.Find(roleId);
 
             if (user == null)
             {
@@ -46,162 +53,74 @@ namespace YahooGroups.Controllers
                 return View("ErrNoEnt");
             }
 
+            ViewBag.Role = role.Name;
+
+            ViewBag.UserRole = "admin";
+
             return View(user);
         }
 
         [HttpPut]
-        public ActionResult MakeModerator (string userId)
+        public ActionResult MakeModerator (string id)
         {
-            var user = db.Users.Find(userId);
-            var UserRole = from role in db.Roles where role.Name == "user" select role; // Get user role
-            var ModeratorRole = from role in db.Roles where role.Name == "moderator" select role; // Get moderator role
+            var userManager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(db));
 
-            var UserInUserRole = UserRole.First().Users.Where((x) => // Get a record from UserRole where this record has the 'user' role and the 'UserId' == user.Id
-            {
-                if (x.UserId == user.Id)
-                {
-                    return true;
-                }
-                return false;
-            }).First();
+            userManager.AddToRole(id, "moderator");
+            userManager.RemoveFromRole(id, "user");
 
-            // Make that record have the 'moderator' role now
-            if (TryUpdateModel(UserInUserRole))
-            {
-                UserInUserRole.RoleId = ModeratorRole.First().Id;
-                db.SaveChanges();
-                return RedirectToAction("Show", new { user.Id });
-            }
-            else
-            {
-                TempData["message"] = "Can't make this user a mod";
-                return RedirectToAction("Show", new { user.Id });
-            }
+            return RedirectToAction("Show", new { id });
         }
 
         [HttpPut]
-        public ActionResult RevokeModerator (string userId)
+        public ActionResult RevokeModerator (string id)
         {
-            var user = db.Users.Find(userId);
-            var UserRole = from role in db.Roles where role.Name == "user" select role; // Get user role
-            var ModeratorRole = from role in db.Roles where role.Name == "moderator" select role; // Get moderator role
+            var userManager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(db));
 
-            var UserInModRole = ModeratorRole.First().Users.Where((u) =>
-            {
-                if (u.UserId == user.Id)
-                {
-                    return true;
-                }
-                return false;
-            });
+            userManager.AddToRole(id, "user");
+            userManager.RemoveFromRole(id, "moderator");
 
-            if (UserInModRole.Count() == 0)
-            {
-                return View("RevokeErr");
-            }
-
-            if (TryUpdateModel(UserInModRole.First()))
-            {
-                UserInModRole.First().RoleId = UserRole.First().Id;
-                db.SaveChanges();
-                return RedirectToAction("Show", new { userId });
-            }
-            else
-            {
-                return View("RevokeErr");
-            }
+            return RedirectToAction("Show", new { id });
         }
 
-        [HttpPut]
-        public ActionResult MakeAdmin(string userId)
+        /*[HttpPut]
+        public ActionResult RevokeAdmin(string id)
         {
-            var user = db.Users.Find(userId);
-            var UserRole = from role in db.Roles where role.Name == "user" select role; // Get user role
-            var ModeratorRole = from role in db.Roles where role.Name == "moderator" select role; // Get moderator role
-            var AdminRole = from role in db.Roles where role.Name == "admin" select role; // Get admin role
+            var userManager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(db));
 
-            
-            var UserInUserRole = UserRole.First().Users.Where((x, b) => // Get a record from UserRole where this record has the 'user' role and the 'UserId' == user.Id
-            {
-                if (x.UserId == user.Id)
-                {
-                    return true;
-                }
-                return false;
-            });
+            userManager.AddToRole(id, "user");
+            userManager.RemoveFromRole(id, "admin");
 
-            if (UserInUserRole.Count() != 0)
+            return RedirectToAction("Show", new { id });
+        }*/
+
+        [HttpPut]
+        public ActionResult MakeAdmin(string id)
+        {
+            var userManager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(db));
+
+            userManager.AddToRole(id, "admin");
+            if (userManager.GetRoles(id).Contains("user"))
             {
-                if (TryUpdateModel(UserInUserRole))
-                {
-                    UserInUserRole.First().RoleId = AdminRole.First().Id;
-                    db.SaveChanges();
-                    return RedirectToAction("Show", new { user.Id });
-                }
-                else
-                {
-                    TempData["message"] = "Can't make this user a mod";
-                    return RedirectToAction("Show", new { user.Id });
-                }
+                userManager.RemoveFromRole(id, "user");
             }
-            else
+            if (userManager.GetRoles(id).Contains("moderator"))
             {
-                // This means that this user is not an 'user' so he must be a 'moderator'
-
-                var UserInModRole = UserRole.First().Users.Where((x) => // Get a record from UserRole where this record has the 'user' role and the 'UserId' == user.Id
-                {
-                    if (x.UserId == user.Id)
-                    {
-                        return true;
-                    }
-                    return false;
-                }).First();
-
-                if (TryUpdateModel(UserInModRole))
-                {
-                    UserInModRole.RoleId = AdminRole.First().Id;
-                    db.SaveChanges();
-                    return RedirectToAction("Show", new { user.Id });
-                }
-                else
-                {
-                    TempData["message"] = "Can't make this user a mod";
-                    return RedirectToAction("Show", new { user.Id });
-                }
+                userManager.RemoveFromRole(id, "moderator");
             }
-            
+
+            return RedirectToAction("Show", new { id });
         }
 
         [HttpDelete]
-        public ActionResult Delete(string userId)
+        public ActionResult Delete(string id)
         {
-            // Check if the given user is an admin. You shouldn't be able to delete an admin account
-            var user = db.Users.Find(userId);
-            var AdminRole = from role in db.Roles where role.Name == "admin" select role;
+            var userManager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(db));
 
-           
-            var UserInAdminRole = user.Roles.Where((x) =>
-            {
-                if (x.RoleId == AdminRole.First().Id)
-                {
-                    return true;
-                }
+            var user = db.Users.Find(id);
 
-                return false;
-            });
+            userManager.Delete(user);
 
-            if (UserInAdminRole.Count() == 0)
-            {
-                // This user is not an admin so we delete him
-                db.Users.Remove(user);
-                db.SaveChanges();
-                return RedirectToAction("Index");
-            }
-            else
-            {
-                // This user is an admin and can't be removed
-                return View("DeleteAdmin");
-            }
+            return RedirectToAction("Index");
         }
     }
 }

@@ -1,33 +1,91 @@
 ﻿@{
-    ViewBag.Title = "Home Page";
+    ViewBag.Title = "Yahoo Groups";
 }
 
-<div class="jumbotron">
+<div class="jumbotron jumbotron-fluid">
     <div class="container-fluid">
-        <h1>ASP.NET</h1>
-        <p class="lead">ASP.NET is a free web framework for building great Web sites and Web applications using HTML, CSS and JavaScript.</p>
-        <p><a href="https://asp.net" class="btn btn-primary btn-lg">Learn more &raquo;</a></p>
+        <h1 class="text-center">The New <strong style="color:#799DB0">Yahoo Groups</strong> Platform</h1>
+        <p class="lead text-center">Your digital community, all in one big place.</p>
+        <div class="text-center">
+            @Html.ActionLink("Explore the groups", "Index", "Group", new { }, new { @class = "btn btn-light", style = "background-color: #EECB29" })
+            @if (ViewBag.UserRole == "unreg")
+            {
+                <p>or...</p>
+                @Html.ActionLink("Join us", "Register", "Account", routeValues: null, htmlAttributes: new { id = "registerLink", @class = "btn btn-dark", style = "background-color: #974A58" })
+            }
+        </div>
     </div>
 </div>
 
-<div class="row container-fluid">
-    <div class="col-md-4">
-        <h2>Getting started</h2>
-        <p>
-            ASP.NET MVC gives you a powerful, patterns-based way to build dynamic websites that
-            enables a clean separation of concerns and gives you full control over markup
-            for enjoyable, agile development.
-        </p>
-        <p><a class="btn btn-default" href="https://go.microsoft.com/fwlink/?LinkId=301865">Learn more &raquo;</a></p>
+<div class="d-flex flex-column align-items-center">
+    <div class="card mb-3" style="max-width:80%">
+        <div class="row">
+            <div class="col-md-4">
+                <img src="~/Assets/Home/Community.svg" class="card-img" alt="Community" style="object-fit:cover; box-shadow: rgba(128, 128, 128, 0.4) 3px 0px" />
+            </div>
+            <div class="col-md-8">
+                <div class="card-body">
+                    <h4 class="card-title text-center">Find the right community for you</h4>
+                    <p class="card-text">
+                        Join the biggest community aggregation platform on the web and find the one
+                        that is just for you. Finding the groups that hold the same interests as you has never been easier.
+                        <br /><strong style="color:#799DB0">Yahoo Groups</strong> is the perfect platform that hosts community spaces made by
+                        passionate people just like you.
+                    </p>
+                    <div class="text-center">
+                        <a class="btn btn-light text-right" style="background-color:#799DB0">Search groups by topics</a>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
-    <div class="col-md-4">
-        <h2>Get more libraries</h2>
-        <p>NuGet is a free Visual Studio extension that makes it easy to add, remove, and update libraries and tools in Visual Studio projects.</p>
-        <p><a class="btn btn-default" href="https://go.microsoft.com/fwlink/?LinkId=301866">Learn more &raquo;</a></p>
+
+    <div class="card mb-3" style="max-width:80%">
+        <div class="row">
+            <div class="col-md-4">
+                <img src="~/Assets/Home/Connection.svg" class="card-img" alt="Connections" style="object-fit:cover; box-shadow: rgba(128, 128, 128, 0.4) 3px 0px" />
+            </div>
+            <div class="col-md-8">
+                <div class="card-body">
+                    <h4 class="card-title text-center">Build meaningfull relationships</h4>
+                    <p class="card-text">
+                        Our team of dedicated moderators make sure that the platform is a safe environment for people of any
+                        backgrounds.<br />
+                        We make sure that you can build long-lasting and interesting relationships on our platform and we maintain
+                        a high standard of accountability regarding what people post in the groups.
+                    </p>
+                </div>
+            </div>
+        </div>
     </div>
-    <div class="col-md-4">
-        <h2>Web Hosting</h2>
-        <p>You can easily find a web hosting company that offers the right mix of features and price for your applications.</p>
-        <p><a class="btn btn-default" href="https://go.microsoft.com/fwlink/?LinkId=301867">Learn more &raquo;</a></p>
+
+    <div class="card mb-3" style="max-width:80%">
+        <div class="row">
+            <div class="col-md-4">
+                <img src="~/Assets/Home/BuildYourOwn.svg" class="card-img" alt="Community" style="object-fit:cover; box-shadow: rgba(128, 128, 128, 0.4) 3px 0px" />
+            </div>
+            <div class="col-md-8">
+                <div class="card-body">
+                    <h4 class="card-title text-center">Build a digital space for your local community</h4>
+                    <p class="card-text">
+                        Do you want to see your local book club on <strong style="color:#799DB0">Yahoo Groups</strong>?<br />
+                    </p>
+                    @if (ViewBag.UserRole == "unreg")
+                    {
+                        <p>Join us now and bring your community online where you can share, discuss and save the special moments right as they are happening.</p>
+                        <div class="text-center">
+                            @Html.ActionLink("Register now", "Register", "Account", routeValues: null, htmlAttributes: new { @class = "btn btn-light", style = "background-color: #799DB0" })
+                        </div>
+                    }
+                    else
+                    {
+                        <p>Start by creating a group and inviting all your friends over!</p>
+                        <div class="text-center">
+                            @Html.ActionLink("Make new group", "CreateGroup", "Group", routeValues: null, htmlAttributes: new { @class = "btn btn-light", style = "background-color: #799DB0" })
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
     </div>
 </div>

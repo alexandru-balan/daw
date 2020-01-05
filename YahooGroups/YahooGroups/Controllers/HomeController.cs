@@ -10,6 +10,23 @@ namespace YahooGroups.Controllers
     {
         public ActionResult Index()
         {
+            string role = "unreg";
+
+            if (User.IsInRole("admin"))
+            {
+                role = "admin";
+            }
+            else if (User.IsInRole("moderator"))
+            {
+                role = "moderator";
+            }
+            else if (User.IsInRole("user"))
+            {
+                role = "user";
+            }
+
+            ViewBag.UserRole = role;
+
             return View();
         }
 

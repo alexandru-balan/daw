@@ -194,6 +194,9 @@
   <ItemGroup>
     <Content Include="App_Data\aspnet-YahooGroups-20191111022258.mdf" />
     <Content Include="App_Data\aspnet-YahooGroups-20191111022258_log.ldf" />
+    <Content Include="Assets\Home\BuildYourOwn.svg" />
+    <Content Include="Assets\Home\Community.svg" />
+    <Content Include="Assets\Home\Connection.svg" />
     <Content Include="Content\bootstrap-grid.css" />
     <Content Include="Content\bootstrap-grid.min.css" />
     <Content Include="Content\bootstrap-reboot.css" />

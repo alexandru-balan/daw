@@ -1,5 +1,7 @@
 ﻿@model YahooGroups.Models.GroupModels
+
 @{
+    
     ViewBag.Title = "Create a new group";
 }
 
@@ -7,7 +9,7 @@
 <hr />
 <br />
 
-<form method="post" action="/Group/CreateGroup/@ViewBag.ModeratorId">
+<form method="post" action="/Group/CreateGroup">
 
     @Html.HiddenFor(model => model.groupId)
     @Html.HiddenFor(model => model.moderatorId)

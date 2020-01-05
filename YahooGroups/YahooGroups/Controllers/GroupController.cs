@@ -39,9 +39,19 @@ namespace YahooGroups.Controllers
         {
             GroupModels group = db.Groups.Find(id);
             var moderator = db.Users.Find(group.moderatorId);
+            var currentId = User.Identity.GetUserId();
+            var user = db.Users.Find(currentId);
+            bool hasJoined = false;
+
+            if (group.Users.Contains(user))
+            {
+                hasJoined = true;
+            }
 
             ViewBag.Moderator = moderator.UserName;
             ViewBag.Users = group.Users;
+            ViewBag.CurrentId = currentId;
+            ViewBag.HasJoined = hasJoined;
 
             return View(group);
         }
@@ -50,9 +60,10 @@ namespace YahooGroups.Controllers
         public ActionResult Delete(int id)
         {
             GroupModels gr = db.Groups.Find(id);
-            if(gr.moderatorId == User.Identity.GetUserId())
+            if(gr.moderatorId == User.Identity.GetUserId() || User.IsInRole("admin") || User.IsInRole("moderator"))
             {
                 TempData["message"] = "Grupul a fost sters";
+                db.Groups.Remove(gr);
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
@@ -74,11 +85,33 @@ namespace YahooGroups.Controllers
 
             return View(group);
         }
+
+        [Authorize(Roles = "user,moderator,admin")]
+        [HttpPost]
+        public ActionResult Join(int groupId, string userId)
+        {
+            var group = db.Groups.Find(groupId);
+            var user = db.Users.Find(userId);   
+
+            if (TryUpdateModel(group))
+            {
+                group.Users.Add(user);
+                db.SaveChanges();
+            }
+
+            var id = groupId;
+
+            return RedirectToAction("Show", new { id });
+        }
         
         [Authorize(Roles = "user,moderator,admin")]
         [HttpPost]
         public ActionResult CreateGroup(GroupModels group)
         {
+            var user = db.Users.Find(group.moderatorId);
+            group.Users = new List<ApplicationUser>();
+            group.Users.Add(user);
+
             try
             {
                 db.Groups.Add(group);

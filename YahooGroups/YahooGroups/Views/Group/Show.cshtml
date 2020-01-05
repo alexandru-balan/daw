@@ -5,25 +5,30 @@
 <p>@Model.groupDescripiton</p>
 <hr />
 
-@using (Html.BeginForm(actionName: "Delete", controllerName: "Group", routeValues: new { id = @Model.groupId }))
+@if (User.IsInRole("moderator") || User.IsInRole("admin") || ViewBag.CurrentId == Model.moderatorId)
 {
-
-    @Html.HttpMethodOverride(HttpVerbs.Delete)
-
-    <button class="btn btn-danger" type="submit">Delete group</button>
-}
-<br />
-<a class="btn btn-success" href="/Group/Index/">Show all groups</a>
-
-<br />
-@foreach (var user in ViewBag.Users)
-{
-    if (user == Model.groupId)
+    using (Html.BeginForm(actionName: "Delete", controllerName: "Group", routeValues: new { id = @Model.groupId }))
     {
-        <p>@user.UserName</p>
-        <button class="btn btn-success" type="submit">Elimina din grup</button>
-    }
 
+        @Html.HttpMethodOverride(HttpVerbs.Delete)
+
+        <button class="btn btn-danger" type="submit">Delete group</button>
+    }
+    <br />
 }
-<hr />
+
+<h3>Members:</h3>
+@foreach (var user in Model.Users)
+{
+    <span>@user.Email</span>
+}
 <br />
+
+@if (!ViewBag.HasJoined)
+{
+    <form method="post" action="/Group/Join/@Model.groupId/@ViewBag.CurrentId">
+        <button class="btn btn-primary" type="submit">Join Group</button>
+    </form>
+    <br />
+}
+<a class="btn btn-success" href="/Group/Index/">Show all groups</a>

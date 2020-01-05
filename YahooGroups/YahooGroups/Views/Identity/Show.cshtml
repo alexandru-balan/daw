@@ -1,8 +1,28 @@
 ﻿@model YahooGroups.Models.ApplicationUser
 @{
-    ViewBag.Title = "User activity";
+    ViewBag.Title = "User data";
 }
 
 <h1>@ViewBag.Title</h1>
+<p>-- @Model.Email --</p>
 <hr />
 
+<h3>The use is subscribed to the following groups:</h3>
+<br />
+@foreach (var group in Model.Groups)
+{
+    <div class="flex-row">
+        <span>@group.groupName: </span>
+        <span>@group.groupDescripiton</span>
+        @if (Model.Id == group.moderatorId)
+        {
+            <span> -- Moderator</span>
+            <a href="/Identity/RevokeModerator/@Model.Id" class="btn btn-light">Revoke moderator title</a>
+        }
+        else
+        {
+            <span> -- Normal User</span>
+            <a href="/Identity/MakeModerator/@Model.Id" class="btn btn-light">Promote to moderator title</a>
+        }
+    </div>
+}

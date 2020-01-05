@@ -14,6 +14,12 @@ namespace YahooGroups
             routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
 
             routes.MapRoute(
+                name: "GroupJoin",
+                url: "{controller}/{action}/{groupId}/{userId}",
+                defaults: new {controller = "Group", action = "Join"}
+            );
+
+            routes.MapRoute(
                 name: "Default",
                 url: "{controller}/{action}/{id}",
                 defaults: new { controller = "Home", action = "Index", id = UrlParameter.Optional }

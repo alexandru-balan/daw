@@ -19,7 +19,7 @@ namespace YahooGroups.Models
 
         public string moderatorId { get; set; }
 
-        public virtual ICollection<ApplicationUser> Users { get; set; }
+        public virtual ICollection<ApplicationUser> Users { get; set; } = new List<ApplicationUser>();
 
         [Required(ErrorMessage = "You must pick one category")]
         public int CategoryId { get; set; }

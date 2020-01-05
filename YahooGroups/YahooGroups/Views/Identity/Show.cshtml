@@ -17,12 +17,16 @@
         @if (Model.Id == group.moderatorId)
         {
             <span> -- Moderator</span>
-            <a href="/Identity/RevokeModerator/@Model.Id" class="btn btn-light">Revoke moderator title</a>
+            <a class="btn btn-light">Revoke as moderator of group</a>
         }
         else
         {
             <span> -- Normal User</span>
-            <a href="/Identity/MakeModerator/@Model.Id" class="btn btn-light">Promote to moderator title</a>
+            <a class="btn btn-light">Promote to moderator of group</a>
         }
     </div>
 }
+
+<form>
+
+</form>

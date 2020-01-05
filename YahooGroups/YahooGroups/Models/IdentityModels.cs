@@ -18,7 +18,7 @@ namespace YahooGroups.Models
             return userIdentity;
         }
 
-        public virtual ICollection<GroupModels> Groups { get; set; }
+        public virtual ICollection<GroupModels> Groups { get; set; } = new List<GroupModels>();
     }
 
     public class ApplicationDbContext : IdentityDbContext<ApplicationUser>

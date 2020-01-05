@@ -94,38 +94,36 @@ namespace YahooGroups.Controllers
 
             return View(group);
         }
-
-        [Authorize(Roles = "user,moderator,admin")]
-        [HttpPost]
-        public ActionResult Join(int groupId, string userId)
-        {
-            var group = db.Groups.Find(groupId);
-            var user = db.Users.Find(userId);   
-
-            if (TryUpdateModel(group))
-            {
-                group.Users.Add(user);
-                db.SaveChanges();
-            }
-
-            var id = groupId;
-
-            return RedirectToAction("Show", new { id });
-        }
         
         [Authorize(Roles = "user,moderator,admin")]
         [HttpPost]
         public ActionResult CreateGroup(GroupModels group)
         {
             var user = db.Users.Find(group.moderatorId);
-            group.Users = new List<ApplicationUser>();
             group.Users.Add(user);
+
+            var category = db.Categories.Find(group.CategoryId);
 
             try
             {
                 db.Groups.Add(group);
                 db.SaveChanges();
                 TempData["message"] = "Grupul a fost adaugat!";
+
+                // Register the user as member of this group
+                if (TryUpdateModel(user))
+                {
+                    user.Groups.Add(group);
+                    db.SaveChanges();
+                }
+
+                // Register the group as part of category
+                if(TryUpdateModel(category))
+                {
+                    category.Groups.Add(group);
+                    db.SaveChanges();
+                }
+
                 return RedirectToAction("Index");
             }
             catch(Exception e)
@@ -134,6 +132,30 @@ namespace YahooGroups.Controllers
                 TempData["message"] = e.ToString();
                 return View(group);
             }
+        }
+
+        [Authorize(Roles = "user,moderator,admin")]
+        [HttpPost]
+        public ActionResult Join(int groupId, string userId)
+        {
+            var group = db.Groups.Find(groupId);
+            var user = db.Users.Find(userId);
+
+            if (TryUpdateModel(group))
+            {
+                group.Users.Add(user);
+                db.SaveChanges();
+            }
+
+            if (TryUpdateModel(user))
+            {
+                user.Groups.Add(group);
+                db.SaveChanges();   
+            }
+
+            var id = groupId;
+
+            return RedirectToAction("Show", new { id });
         }
 
         [NonAction]

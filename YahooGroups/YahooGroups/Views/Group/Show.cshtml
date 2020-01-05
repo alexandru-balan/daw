@@ -24,7 +24,7 @@
 }
 <br />
 
-@if (!ViewBag.HasJoined)
+@if (!ViewBag.HasJoined && ViewBag.IsLogedIn)
 {
     <form method="post" action="/Group/Join/@Model.groupId/@ViewBag.CurrentId">
         <button class="btn btn-primary" type="submit">Join Group</button>

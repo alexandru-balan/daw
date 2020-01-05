@@ -43,6 +43,15 @@ namespace YahooGroups.Controllers
             var user = db.Users.Find(currentId);
             bool hasJoined = false;
 
+            if (!User.IsInRole("admin") && !User.IsInRole("moderator") && !User.IsInRole("user"))
+            {
+                ViewBag.IsLogedIn = false;
+            }
+            else
+            {
+                ViewBag.IsLogedIn = true;
+            }
+
             if (group.Users.Contains(user))
             {
                 hasJoined = true;

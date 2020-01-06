@@ -25,5 +25,8 @@ namespace YahooGroups.Models
         public int CategoryId { get; set; }
 
         public bool privateGroup { get; set; }
+
+        public virtual ICollection<CommentModel> Comments { get; set; } = new List<CommentModel>();
+        public virtual ICollection<FileModel> Files { get; set; } = new List<FileModel>();
     }
 }

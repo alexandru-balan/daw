@@ -17,6 +17,11 @@
             <ul class="navbar-nav mr-auto">
                 <li class="nav-item active">@Html.ActionLink("Home", "Index", "Home", new { }, new { @class = "nav-link" })</li>
                 <li class="nav-item">@Html.ActionLink("View Groups", "Index", "Group", new { }, new { @class = "nav-link" })</li>
+                @if (ViewBag.IsLogedIn)
+                {
+                    <li class="nav-item"><a class="nav-link" href="#" data-toggle="modal" data-target="#groupList">See Your Groups</a></li>
+                }
+
                 @if (ViewBag.UserRole == "admin")
                 {
                     <li class="nav-item">@Html.ActionLink("View Categories", "Index", "Category", new { }, new { @class = "nav-link" })</li>
@@ -24,6 +29,25 @@
                 }
             </ul>
             @Html.Partial("_LoginPartial")
+        </div>
+
+        <div class="modal fade" id="groupList" tabindex="-1" role="dialog">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Your Groups</h5>
+                        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span></button>
+                    </div>
+                    <div class="modal-body d-flex flex-column align-items-center justify-content-around">
+                        <div class="d-flex flex-row align-content-between align-items-center">
+                            @foreach (var group in ViewBag.CurrentUserGroups)
+                            {
+                                <span class="mr-5">@group.groupName</span>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </nav>
     <div class>

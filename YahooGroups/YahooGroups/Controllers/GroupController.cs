@@ -37,6 +37,9 @@ namespace YahooGroups.Controllers
                 ViewBag.UserRole = "admin";
             }
 
+            var user = db.Users.Find(User.Identity.GetUserId());
+            ViewBag.CurrentUserGroups = user.Groups;
+
             return View();
         }
 
@@ -72,6 +75,8 @@ namespace YahooGroups.Controllers
             {
                 ViewBag.UserRole = "admin";
             }
+
+            ViewBag.CurrentUserGroups = user.Groups;
 
             return View(group);
         }
@@ -138,6 +143,18 @@ namespace YahooGroups.Controllers
             {
                 ViewBag.UserRole = "admin";
             }
+
+            if (!User.IsInRole("admin") && !User.IsInRole("moderator") && !User.IsInRole("user"))
+            {
+                ViewBag.IsLogedIn = false;
+            }
+            else
+            {
+                ViewBag.IsLogedIn = true;
+            }
+
+            var user = db.Users.Find(User.Identity.GetUserId());
+            ViewBag.CurrentUserGroups = user.Groups;
 
             return View(group);
         }

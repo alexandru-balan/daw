@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.AspNet.Identity;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -24,6 +25,18 @@ namespace YahooGroups.Controllers
                 ViewBag.UserRole = "admin";
             }
 
+            if (User.IsInRole("user") || User.IsInRole("moderator") || User.IsInRole("admin"))
+            {
+                ViewBag.IsLogedIn = true;
+            }
+            else
+            {
+                ViewBag.IsLogedIn = false;
+            }
+
+            var user = db.Users.Find(User.Identity.GetUserId());
+            ViewBag.CurrentUserGroups = user.Groups;
+
             return View();
         }
 
@@ -43,6 +56,18 @@ namespace YahooGroups.Controllers
                 ViewBag.UserRole = "admin";
             }
 
+            if (User.IsInRole("user") || User.IsInRole("moderator") || User.IsInRole("admin"))
+            {
+                ViewBag.IsLogedIn = true;
+            }
+            else
+            {
+                ViewBag.IsLogedIn = false;
+            }
+
+            var user = db.Users.Find(User.Identity.GetUserId());
+            ViewBag.CurrentUserGroups = user.Groups;
+
             return View(Category);
         }
 
@@ -55,6 +80,18 @@ namespace YahooGroups.Controllers
             {
                 ViewBag.UserRole = "admin";
             }
+
+            if (User.IsInRole("user") || User.IsInRole("moderator") || User.IsInRole("admin"))
+            {
+                ViewBag.IsLogedIn = true;
+            }
+            else
+            {
+                ViewBag.IsLogedIn = false;
+            }
+
+            var user = db.Users.Find(User.Identity.GetUserId());
+            ViewBag.CurrentUserGroups = user.Groups;
 
             return View(category);
         }
@@ -100,6 +137,18 @@ namespace YahooGroups.Controllers
             {
                 ViewBag.UserRole = "admin";
             }
+
+            if (User.IsInRole("user") || User.IsInRole("moderator") || User.IsInRole("admin"))
+            {
+                ViewBag.IsLogedIn = true;
+            }
+            else
+            {
+                ViewBag.IsLogedIn = false;
+            }
+
+            var user = db.Users.Find(User.Identity.GetUserId());
+            ViewBag.CurrentUserGroups = user.Groups;
 
             return View(Category);
         }

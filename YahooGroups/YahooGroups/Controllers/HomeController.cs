@@ -1,13 +1,17 @@
-﻿using System;
+﻿using Microsoft.AspNet.Identity;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using YahooGroups.Models;
 
 namespace YahooGroups.Controllers
 {
     public class HomeController : Controller
     {
+        private ApplicationDbContext db = new ApplicationDbContext();
+
         public ActionResult Index()
         {
             string role = "unreg";
@@ -26,6 +30,19 @@ namespace YahooGroups.Controllers
             }
 
             ViewBag.UserRole = role;
+
+            var user = db.Users.Find(User.Identity.GetUserId());
+
+            ViewBag.CurrentUserGroups = user.Groups;
+
+            if (!User.IsInRole("admin") && !User.IsInRole("moderator") && !User.IsInRole("user"))
+            {
+                ViewBag.IsLogedIn = false;
+            }
+            else
+            {
+                ViewBag.IsLogedIn = true;
+            }
 
             return View();
         }

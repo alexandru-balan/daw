@@ -11,15 +11,15 @@ namespace YahooGroups.Controllers
     {
         private ApplicationDbContext db = new ApplicationDbContext();
         
-        public ActionResult Index()
+        public ActionResult Index(int? id)
         {
             if (TempData.ContainsKey("message"))
             {
                 ViewBag.message = TempData["message"].ToString();
             }
-
+            
             var groups = from gr in db.Groups select gr;
-
+            
             ViewBag.Groups = groups.ToList();
 
             bool IsLogedIn = false;
@@ -30,6 +30,11 @@ namespace YahooGroups.Controllers
             }
 
             ViewBag.IsLogedIn = IsLogedIn;
+
+            if (User.IsInRole("admin"))
+            {
+                ViewBag.UserRole = "admin";
+            }
 
             return View();
         }
@@ -62,6 +67,11 @@ namespace YahooGroups.Controllers
             ViewBag.CurrentId = currentId;
             ViewBag.HasJoined = hasJoined;
 
+            if (User.IsInRole("admin"))
+            {
+                ViewBag.UserRole = "admin";
+            }
+
             return View(group);
         }
 
@@ -91,6 +101,11 @@ namespace YahooGroups.Controllers
             group.moderatorId = User.Identity.GetUserId();
 
             ViewBag.Categories = GetAllCategories();
+
+            if (User.IsInRole("admin"))
+            {
+                ViewBag.UserRole = "admin";
+            }
 
             return View(group);
         }
@@ -156,6 +171,30 @@ namespace YahooGroups.Controllers
             var id = groupId;
 
             return RedirectToAction("Show", new { id });
+        }
+
+        [HttpPost]
+        public ActionResult Search (string search)
+        {
+            var Groups = (from gr in db.Groups where gr.groupName.ToUpper().Contains(search.ToUpper()) select gr).ToList();
+
+            ViewBag.Groups = Groups;
+
+            if (User.IsInRole("user") || User.IsInRole("moderator") || User.IsInRole("admin"))
+            {
+                ViewBag.IsLogedIn = true;
+            }
+            else
+            {
+                ViewBag.IsLogedIn = false;
+            }
+
+            if (User.IsInRole("admin"))
+            {
+                ViewBag.UserRole = "admin";
+            }
+
+            return View("Index");
         }
 
         [NonAction]

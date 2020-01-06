@@ -1,21 +1,45 @@
 ﻿@model YahooGroups.Models.GroupModels
 
+<div class="jumbotron jumbotron-fluid" style="background-color:#000000">
+    <div class="container d-flex align-items-center flex-column">
+        <div class="w-100 d-flex flex-row justify-content-center align-items-center justify-content-around">
+            <h1 style="color:#ECF1EE">Welcome to @Model.groupName</h1>
+        </div>
+        <span style="color:#ECF1EE"> -- Owner: <em>@ViewBag.Moderator</em></span>
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-header">
+        <ul class="nav nav-pills card-header-pills">
+            <li class="nav-item">
+                <a class="nav-link active" href="#">Conversation</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#">Files & Media</a>
+            </li>
+            @if (User.IsInRole("moderator") || User.IsInRole("admin") || ViewBag.CurrentId == Model.moderatorId)
+            {
+                <li class="nav-item ml-auto">
+                    @using (Html.BeginForm(actionName: "Delete", controllerName: "Group", routeValues: new { id = @Model.groupId }))
+                    {
+
+                    @Html.HttpMethodOverride(HttpVerbs.Delete)
+
+                    <button class="nav-link text-danger" type="submit">Delete group</button>
+                    }
+                </li>
+            }
+        </ul>
+    </div>
+</div>
+
 <h1>@Model.groupName</h1>
 <em>Moderator: @ViewBag.Moderator</em>
 <p>@Model.groupDescripiton</p>
 <hr />
 
-@if (User.IsInRole("moderator") || User.IsInRole("admin") || ViewBag.CurrentId == Model.moderatorId)
-{
-    using (Html.BeginForm(actionName: "Delete", controllerName: "Group", routeValues: new { id = @Model.groupId }))
-    {
 
-        @Html.HttpMethodOverride(HttpVerbs.Delete)
-
-        <button class="btn btn-danger" type="submit">Delete group</button>
-    }
-    <br />
-}
 
 <h3>Members:</h3>
 @foreach (var user in Model.Users)

@@ -356,6 +356,7 @@
   <ItemGroup>
     <Content Include="App_Data\aspnet-YahooGroups-20191111022258.mdf" />
     <Content Include="App_Data\aspnet-YahooGroups-20191111022258_log.ldf" />
+    <Content Include="Assets\Groups\FormFill.svg" />
     <Content Include="Assets\Groups\stars.png" />
     <Content Include="Assets\Home\BuildYourOwn.svg" />
     <Content Include="Assets\Home\Community.svg" />

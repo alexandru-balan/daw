@@ -19,6 +19,11 @@ namespace YahooGroups.Controllers
 
             ViewBag.Categories = Categories;
 
+            if (User.IsInRole("admin"))
+            {
+                ViewBag.UserRole = "admin";
+            }
+
             return View();
         }
 
@@ -33,6 +38,11 @@ namespace YahooGroups.Controllers
                 return View("ErrNoEnt");
             }
 
+            if (User.IsInRole("admin"))
+            {
+                ViewBag.UserRole = "admin";
+            }
+
             return View(Category);
         }
 
@@ -40,6 +50,12 @@ namespace YahooGroups.Controllers
         public ActionResult New()
         {
             CategoryModel category = new CategoryModel();
+
+            if (User.IsInRole("admin"))
+            {
+                ViewBag.UserRole = "admin";
+            }
+
             return View(category);
         }
 
@@ -79,6 +95,11 @@ namespace YahooGroups.Controllers
             }
 
             ViewBag.categoryId = id;
+
+            if (User.IsInRole("admin"))
+            {
+                ViewBag.UserRole = "admin";
+            }
 
             return View(Category);
         }

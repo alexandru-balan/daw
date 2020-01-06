@@ -21,6 +21,8 @@ namespace YahooGroups.Models
 
         public virtual ICollection<ApplicationUser> Users { get; set; } = new List<ApplicationUser>();
 
+        public ICollection<ApplicationUser> InQueue { get; set; } = new List<ApplicationUser>();
+
         [Required(ErrorMessage = "You must pick one category")]
         public int CategoryId { get; set; }
 

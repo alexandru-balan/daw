@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using System.Web.UI;
 using YahooGroups.Models;
 namespace YahooGroups.Controllers
 {
@@ -82,6 +83,22 @@ namespace YahooGroups.Controllers
             if(gr.moderatorId == User.Identity.GetUserId() || User.IsInRole("admin") || User.IsInRole("moderator"))
             {
                 TempData["message"] = "Grupul a fost sters";
+                foreach(var user in gr.Users)
+                {
+                    if (TryUpdateModel(gr))
+                    {
+                        user.Groups.Remove(gr);
+                        db.SaveChanges();
+                    }
+                }
+                foreach (var user in gr.InQueue)
+                {
+                    if (TryUpdateModel(gr))
+                    {
+                        user.Groups.Remove(gr);
+                        db.SaveChanges();
+                    }
+                }
                 db.Groups.Remove(gr);
                 db.SaveChanges();
                 return RedirectToAction("Index");
@@ -91,6 +108,21 @@ namespace YahooGroups.Controllers
                 TempData["message"] = "Nu ai dreptul sa stergi acest grup";
                 return RedirectToAction("Index");
             }
+        }
+
+        public ActionResult Kick (int groupId, string userId)
+        {
+            var user = db.Users.Find(userId);
+            var group = db.Groups.Find(groupId);
+            var id = groupId;
+
+            if (TryUpdateModel(group))
+            {
+                group.Users.Remove(user);
+                db.SaveChanges();
+            }
+
+            return RedirectToAction("Show", new { id });
         }
 
         [Authorize(Roles = "user,moderator,admin")]
@@ -155,6 +187,24 @@ namespace YahooGroups.Controllers
         {
             var group = db.Groups.Find(groupId);
             var user = db.Users.Find(userId);
+            var id = groupId;
+
+            if (group.privateGroup)
+            {
+                if (group.InQueue.Contains(user))
+                {
+                    return RedirectToAction("Show", new { id });
+                }
+                else
+                {
+                    if (TryUpdateModel(group))
+                    {
+                        group.InQueue.Add(user);
+                        db.SaveChanges();
+                    }
+                    return RedirectToAction("Show", new { id });
+                }
+            }
 
             if (TryUpdateModel(group))
             {
@@ -168,7 +218,44 @@ namespace YahooGroups.Controllers
                 db.SaveChanges();   
             }
 
+            return RedirectToAction("Show", new { id });
+        }
+
+        [HttpGet]
+        public ActionResult Approve (int groupId, string userId)
+        {
+            var user = db.Users.Find(userId);
+            var group = db.Groups.Find(groupId);
             var id = groupId;
+
+            if (TryUpdateModel(group))
+            {
+                group.InQueue.Remove(user);
+                group.Users.Add(user);
+                db.SaveChanges();
+            }
+
+            if (TryUpdateModel(user))
+            {
+                user.Groups.Add(group);
+                db.SaveChanges();
+            }
+
+            return RedirectToAction("Show", new { id });
+        }
+
+        [HttpGet]
+        public ActionResult Deny(int groupId, string userId)
+        {
+            var user = db.Users.Find(userId);
+            var group = db.Groups.Find(groupId);
+            var id = groupId;
+
+            if (TryUpdateModel(group))
+            {
+                group.InQueue.Remove(user);
+                db.SaveChanges();
+            }
 
             return RedirectToAction("Show", new { id });
         }

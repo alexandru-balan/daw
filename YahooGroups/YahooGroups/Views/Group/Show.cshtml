@@ -5,11 +5,27 @@
         <div class="w-100 d-flex flex-row justify-content-center align-items-center justify-content-around">
             <h1 style="color:#ECF1EE">Welcome to @Model.groupName</h1>
         </div>
-        <span style="color:#ECF1EE"> -- Owner: <em>@ViewBag.Moderator</em></span>
+        <span style="color:#ECF1EE"> -- <strong>Owner:</strong> <em>@ViewBag.Moderator --</em></span>
+        <p style="color:#ECF1EE">-- @Model.groupDescripiton --</p>
+        @if (!ViewBag.HasJoined && ViewBag.IsLogedIn)
+        {
+            if (Model.privateGroup)
+            {
+                <p style="color:#ECF1EE">-- This is a private group. After joining you will need to wait for approval from the owner. --</p>
+            }
+            else
+            {
+                <p style="color:#ECF1EE">-- This is a public group. Anyone can join anytime. --</p>
+            }
+            <form method="post" action="/Group/Join/@Model.groupId/@ViewBag.CurrentId">
+                <button class="btn btn-primary" type="submit">Join Group</button>
+            </form>
+            <br />
+        }
     </div>
 </div>
 
-<div class="card">
+<div class="card m-auto" style="width:95vw;">
     <div class="card-header">
         <ul class="nav nav-pills card-header-pills">
             <li class="nav-item">
@@ -18,41 +34,82 @@
             <li class="nav-item">
                 <a class="nav-link" href="#">Files & Media</a>
             </li>
+
+            <li class="nav-item">
+                <a class="nav-link" href="#" data-toggle="modal" data-target="#userList">Show members</a>
+            </li>
+
+            @if (User.IsInRole("moderator") || User.IsInRole("admin") || ViewBag.CurrentId == Model.moderatorId)
+            {
+                <li class="nav-item">
+                    <a class="nav-link" href="#" data-toggle="modal" data-target="#pendingList">Pending invites -- @Model.InQueue.Count invites</a>
+                </li>
+            }
+
             @if (User.IsInRole("moderator") || User.IsInRole("admin") || ViewBag.CurrentId == Model.moderatorId)
             {
                 <li class="nav-item ml-auto">
                     @using (Html.BeginForm(actionName: "Delete", controllerName: "Group", routeValues: new { id = @Model.groupId }))
                     {
 
-                    @Html.HttpMethodOverride(HttpVerbs.Delete)
+                        @Html.HttpMethodOverride(HttpVerbs.Delete)
 
-                    <button class="nav-link text-danger" type="submit">Delete group</button>
+                        <button class="nav-link text-danger" type="submit">Delete group</button>
                     }
                 </li>
             }
-        </ul>
+            </ul>
+    </div>
+    <div class="card-body overflow-auto" style="height:75vh; width: 100%">
+
     </div>
 </div>
 
-<h1>@Model.groupName</h1>
-<em>Moderator: @ViewBag.Moderator</em>
-<p>@Model.groupDescripiton</p>
-<hr />
+<div class="modal fade" id="userList" tabindex="-1" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Members of @Model.groupName</h5>
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span></button>
+            </div>
+            <div class="modal-body d-flex flex-column align-items-center justify-content-around">
+                <div class="d-flex flex-row align-content-between align-items-center">
+                    @foreach (var user in Model.Users)
+                    {
+                        <span class="mr-5">@user.Email</span>
+                        if (User.IsInRole("moderator") || User.IsInRole("admin") || ViewBag.CurrentId == Model.moderatorId)
+                        {
 
+                            <a href="/Group/Kick/@Model.groupId/@user.Id" class="btn btn-danger">Kick user out</a>
+                        }
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 
+<div class="modal fade" id="pendingList" tabindex="-1" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Members of @Model.groupName</h5>
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span></button>
+            </div>
+            <div class="modal-body d-flex flex-column align-items-center justify-content-around">
+                <div class="d-flex flex-row align-content-between align-items-center">
+                    @foreach (var user in Model.InQueue)
+                    {
+                        <span class="mr-5">@user.Email</span>
+                        if (User.IsInRole("moderator") || User.IsInRole("admin") || ViewBag.CurrentId == Model.moderatorId)
+                        {
 
-<h3>Members:</h3>
-@foreach (var user in Model.Users)
-{
-    <span>@user.Email</span>
-}
-<br />
-
-@if (!ViewBag.HasJoined && ViewBag.IsLogedIn)
-{
-    <form method="post" action="/Group/Join/@Model.groupId/@ViewBag.CurrentId">
-        <button class="btn btn-primary" type="submit">Join Group</button>
-    </form>
-    <br />
-}
-<a class="btn btn-success" href="/Group/Index/">Show all groups</a>
+                            <a href="/Group/Approve/@Model.groupId/@user.Id" class="btn btn-success">Approve</a>
+                            <a href="/Group/Deny/@Model.groupId/@user.Id" class="btn btn-danger">Deny</a>
+                        }
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

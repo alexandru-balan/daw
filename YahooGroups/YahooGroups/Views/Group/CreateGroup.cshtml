@@ -5,37 +5,45 @@
     ViewBag.Title = "Create a new group";
 }
 
-<h1>@ViewBag.Title</h1>
-<hr />
-<br />
+<div class="jumbotron jumbotron-fluid" style="background-color:#974a58">
+    <div class="container-fluid">
+        <h1 class="text-center" style="color:#ECF1EE">Bring your digital community to life</h1>
+    </div>
+</div>
 
-<form method="post" action="/Group/CreateGroup">
+<div class="vw-100 d-flex flex-row align-items-center justify-content-around">
+    <img class="w-25" src="~/Assets/Groups/FormFill.svg" />
 
-    @Html.HiddenFor(model => model.groupId)
-    @Html.HiddenFor(model => model.moderatorId)
+    <form class="w-50" method="post" action="/Group/CreateGroup">
 
-    @Html.ValidationSummary(false, "", new { @class = "text-danger" })
+        @Html.HiddenFor(model => model.groupId)
+        @Html.HiddenFor(model => model.moderatorId)
 
-    @Html.LabelFor(model => model.groupName)
-    <br />
-    @Html.EditorFor(model => model.groupName)
-    <br /><br />
+        @Html.ValidationSummary(false, "", new { @class = "text-danger" })
 
-    @Html.LabelFor(model => model.groupDescripiton)
-    <br />
-    @Html.EditorFor(model => model.groupDescripiton)
-    <br /><br />
+        @Html.LabelFor(model => model.groupName, "Group Name")
+        <br />
+        @Html.EditorFor(model => model.groupName, new { htmlAttributes = new { @class = "w-100 rounded form-control" } })
+        <br /><br />
 
-    @Html.LabelFor(model => model.privateGroup)
-    <br />
-    @Html.CheckBoxFor(model => model.privateGroup)
-    <br /><br />
+        @Html.LabelFor(model => model.groupDescripiton, "Group Description")
+        <br />
+        @Html.EditorFor(model => model.groupDescripiton, new { htmlAttributes = new { @class = "w-100 rounded form-control" } })
+        <br /><br />
 
-    @Html.LabelFor(model => model.CategoryId)
-    <br />
-    @Html.DropDownListFor(model => model.CategoryId, new SelectList(ViewBag.Categories, "Value", "Text"), "Pick a category", new { @class = "form-control" })
-    <br /><br />
+        @Html.LabelFor(model => model.privateGroup, "Check to make group invite-only")
+        <br />
+        @Html.CheckBoxFor(model => model.privateGroup)
+        <br /><br />
 
-    <button class="btn btn-success" type="submit">Create Group</button>
-</form>
+        @Html.LabelFor(model => model.CategoryId, "Pick a category")
+        <br />
+        @Html.DropDownListFor(model => model.CategoryId, new SelectList(ViewBag.Categories, "Value", "Text"), "Pick a category", new { @class = "form-control" })
+        <br /><br />
+
+        <button class="btn btn-success" type="submit">Create Group</button>
+    </form>
+</div>
+
+
 

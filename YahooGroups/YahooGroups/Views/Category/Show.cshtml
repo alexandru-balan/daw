@@ -1,0 +1,26 @@
+﻿@model YahooGroups.Models.CategoryModel
+
+<h2>@Model.Name category</h2>
+<hr />
+<br />
+
+<div class="flex-row">
+    <a class="btn" href="/Category/Edit/@Model.CategoryId">Edit this category</a>
+
+    <form method="post", action="/Category/Delete/@Model.CategoryId">
+
+        @Html.HttpMethodOverride(HttpVerbs.Delete)
+
+        <button class="btn btn-danger" type="submit">Delete this category</button>
+    </form>
+</div>
+
+@foreach (var group in Model.Groups)
+{
+    <h2>@group.groupName</h2>
+    <hr />
+    <p>@group.groupDescripiton</p>
+    <br />
+ 
+    <a class="btn" href="/Group/Show/@group.groupId">View Group</a>
+}

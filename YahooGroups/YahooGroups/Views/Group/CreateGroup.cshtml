@@ -1,19 +1,41 @@
-﻿@using YahooGroups.Models
-@model GroupModels
+﻿@model YahooGroups.Models.GroupModels
+
 @{
-    ViewBag.Title = "CreateGroup";
+    
+    ViewBag.Title = "Create a new group";
 }
 
-<h2>@ViewBag.Title</h2>
+<h1>@ViewBag.Title</h1>
+<hr />
+<br />
+
 <form method="post" action="/Group/CreateGroup">
-    @Html.Label("GroupName", "Group Name")
+
+    @Html.HiddenFor(model => model.groupId)
+    @Html.HiddenFor(model => model.moderatorId)
+
+    @Html.ValidationSummary(false, "", new { @class = "text-danger" })
+
+    @Html.LabelFor(model => model.groupName)
     <br />
-    @Html.TextBox("GroupName", null, new { @class = "form-control" })
+    @Html.EditorFor(model => model.groupName)
     <br /><br />
-    @Html.Label("GroupDescription","Group Description")
+
+    @Html.LabelFor(model => model.groupDescripiton)
     <br />
-    @Html.TextBox("GroupDescription", null, new{@class = "form-control"})
-    <br/><br/>
+    @Html.EditorFor(model => model.groupDescripiton)
+    <br /><br />
+
+    @Html.LabelFor(model => model.privateGroup)
+    <br />
+    @Html.CheckBoxFor(model => model.privateGroup)
+    <br /><br />
+
+    @Html.LabelFor(model => model.CategoryId)
+    <br />
+    @Html.DropDownListFor(model => model.CategoryId, new SelectList(ViewBag.Categories, "Value", "Text"), "Pick a category", new { @class = "form-control" })
+    <br /><br />
+
     <button class="btn btn-success" type="submit">Create Group</button>
 </form>
 

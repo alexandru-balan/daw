@@ -1,16 +1,43 @@
-﻿
-@{
-    ViewBag.Title = "Index";
+﻿@{
+    ViewBag.Title = "Groups";
 }
 
-<h2>Index</h2>
+<div class="jumbotron jumbotron-fluid text-center" style="background-image:url(/Assets/Groups/stars.png); background-attachment:fixed; position:relative">
+    <div class="container-fluid">
+        <h1 style="color:#ECF1EE">Discover your new favourite groups</h1>
+        <form method="post" action="/Group/Search">
+            <input style="background-color:#ECF1EE" type="text" class="w-25" placeholder="Type here to search" autofocus name="search" />
+            <button class="rounded" style="background-color:#ECF1EE" type="submit">Search</button>
+        </form>
 
-<from method="post" action="/Group/Index">s
-    @foreach (var gr in ViewBag.Groups)
-    {
-        @Html.Label("groupName", "Denumire Grup")
-        <p>@gr.groupName</p>
-        <a class="btn btn-success" href="/Group/Show/@gr.groupId">Afisare grup</a>
-        <button class="btn btn-success" type="submit">Inscrie-te in grup</button>
-    }
-</from>
+        @if (ViewBag.IsLogedIn)
+        {
+            <h2 style="color:white">OR</h2>
+            <a class="btn btn-light" href="/Group/CreateGroup">Create your own group</a>
+        }
+    </div>
+
+    
+</div>
+
+
+
+@foreach (var group in ViewBag.Groups)
+{
+
+    <div class="d-flex flex-column align-items-center mb-3">
+        <div class="card text-center" style="width:90%">
+            <div class="card-header">
+                <h4 class="card-title">@group.groupName</h4>
+            </div>
+            <div class="card-body">
+                <p class="card-text">@group.groupDescripiton</p>
+                <a class="btn btn-success" href="/Group/Show/@group.groupId">View group</a>
+            </div>
+            <div class="card-footer text-muted">
+                <span>@group.Users.Count users in group</span>
+            </div>
+        </div>
+    </div>
+}
+

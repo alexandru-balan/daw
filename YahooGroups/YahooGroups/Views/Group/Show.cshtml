@@ -1,30 +1,58 @@
-﻿
-@{
-    ViewBag.Title = "Show";
-}
+﻿@model YahooGroups.Models.GroupModels
 
-<h2>Show</h2>
+<div class="jumbotron jumbotron-fluid" style="background-color:#000000">
+    <div class="container d-flex align-items-center flex-column">
+        <div class="w-100 d-flex flex-row justify-content-center align-items-center justify-content-around">
+            <h1 style="color:#ECF1EE">Welcome to @Model.groupName</h1>
+        </div>
+        <span style="color:#ECF1EE"> -- Owner: <em>@ViewBag.Moderator</em></span>
+    </div>
+</div>
 
-<p>@Model.GroupName</p>
-@using (Html.BeginForm(actionName: "Delete", controllerName: "Group", routeValues: new { id = @Model.GroupId }))
-{
+<div class="card">
+    <div class="card-header">
+        <ul class="nav nav-pills card-header-pills">
+            <li class="nav-item">
+                <a class="nav-link active" href="/Comment/Conversation/@Model.groupId/@Model.groupId">Conversation</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/File/Show/@Model.goupId/@Model.groupId">Files & Media</a>
+            </li>
+            @if (User.IsInRole("moderator") || User.IsInRole("admin") || ViewBag.CurrentId == Model.moderatorId)
+            {
+                <li class="nav-item ml-auto">
+                    @using (Html.BeginForm(actionName: "Delete", controllerName: "Group", routeValues: new { id = @Model.groupId }))
+                    {
 
-    @Html.HttpMethodOverride(HttpVerbs.Delete)
+                    @Html.HttpMethodOverride(HttpVerbs.Delete)
 
-    <button class="btn btn-success" type="submit">Sterge grupul</button>
-}
-<br />
-<a class="btn btn-success" href="/Group/Index/">Afisare lista grupuri</a>
+                    <button class="nav-link text-danger" type="submit">Delete group</button>
+                    }
+                </li>
+            }
+        </ul>
+    </div>
+</div>
 
-<br />
-@foreach (var user in ViewBag.Users)
-{
-    if (user.GroupModels_groupId == Model.GroupId)
-    {
-        <p>@user.UserName</p>
-        <button class="btn btn-success" type="submit">Elimina din grup</button>
-    }
-
-}
+<h1>@Model.groupName</h1>
+<em>Moderator: @ViewBag.Moderator</em>
+<p>@Model.groupDescripiton</p>
 <hr />
+
+
+
+<h3>Members:</h3>
+@foreach (var user in Model.Users)
+{
+    <span>@user.Email</span>
+}
 <br />
+
+@if (!ViewBag.HasJoined && ViewBag.IsLogedIn)
+{
+    <form method="post" action="/Group/Join/@Model.groupId/@ViewBag.CurrentId">
+        <button class="btn btn-primary" type="submit">Join Group</button>
+    </form>
+    <br />
+}
+<a class="btn btn-success" href="/Group/Index/">Show all groups</a>

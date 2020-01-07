@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.AspNet.Identity;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -10,34 +11,78 @@ namespace YahooGroups.Controllers
     {
         private ApplicationDbContext db = new ApplicationDbContext();
         
-        public ActionResult Index()
+        public ActionResult Index(int? id)
         {
             if (TempData.ContainsKey("message"))
             {
                 ViewBag.message = TempData["message"].ToString();
             }
+            
+            var groups = from gr in db.Groups select gr;
+            
+            ViewBag.Groups = groups.ToList();
 
-            var groups = from gr in db.Groups
-                             orderby gr.groupName
-                             select gr;
-            ViewBag.Groups = groups;
+            bool IsLogedIn = false;
+
+            if (User.IsInRole("user") || User.IsInRole("moderator") || User.IsInRole("admin"))
+            {
+                IsLogedIn = true;
+            }
+
+            ViewBag.IsLogedIn = IsLogedIn;
+
+            if (User.IsInRole("admin"))
+            {
+                ViewBag.UserRole = "admin";
+            }
+
             return View();
         }
+
+        [HttpGet]
         public ActionResult Show(int id)
         {
-            GroupModels gr = db.Groups.Find(id);
-            return View(gr);
+            GroupModels group = db.Groups.Find(id);
+            var moderator = db.Users.Find(group.moderatorId);
+            var currentId = User.Identity.GetUserId();
+            var user = db.Users.Find(currentId);
+            bool hasJoined = false;
+
+            if (!User.IsInRole("admin") && !User.IsInRole("moderator") && !User.IsInRole("user"))
+            {
+                ViewBag.IsLogedIn = false;
+            }
+            else
+            {
+                ViewBag.IsLogedIn = true;
+            }
+
+            if (group.Users.Contains(user))
+            {
+                hasJoined = true;
+            }
+
+            ViewBag.Moderator = moderator.UserName;
+            ViewBag.Users = group.Users;
+            ViewBag.CurrentId = currentId;
+            ViewBag.HasJoined = hasJoined;
+
+            if (User.IsInRole("admin"))
+            {
+                ViewBag.UserRole = "admin";
+            }
+
+            return View(group);
         }
-        public ActionResult New()
-        {
-            return View();
-        }
+
+        [HttpDelete]
         public ActionResult Delete(int id)
         {
             GroupModels gr = db.Groups.Find(id);
-            if(gr.moderatorId == User.GetHashCode())
+            if(gr.moderatorId == User.Identity.GetUserId() || User.IsInRole("admin") || User.IsInRole("moderator"))
             {
                 TempData["message"] = "Grupul a fost sters";
+                db.Groups.Remove(gr);
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
@@ -47,44 +92,127 @@ namespace YahooGroups.Controllers
                 return RedirectToAction("Index");
             }
         }
-        [Authorize]
+
+        [Authorize(Roles = "user,moderator,admin")]
         public ActionResult CreateGroup()
         {
-            return View();
+            var group = new GroupModels();
+
+            group.moderatorId = User.Identity.GetUserId();
+
+            ViewBag.Categories = GetAllCategories();
+
+            if (User.IsInRole("admin"))
+            {
+                ViewBag.UserRole = "admin";
+            }
+
+            return View(group);
         }
+        
+        [Authorize(Roles = "user,moderator,admin")]
         [HttpPost]
-        public ActionResult CreateGroup(GroupModels Gr)
+        public ActionResult CreateGroup(GroupModels group)
         {
+            var user = db.Users.Find(group.moderatorId);
+            group.Users.Add(user);
+
+            var category = db.Categories.Find(group.CategoryId);
+
             try
             {
-                db.Groups.Add(Gr);
+                db.Groups.Add(group);
                 db.SaveChanges();
                 TempData["message"] = "Grupul a fost adaugat!";
+
+                // Register the user as member of this group
+                if (TryUpdateModel(user))
+                {
+                    user.Groups.Add(group);
+                    db.SaveChanges();
+                }
+
+                // Register the group as part of category
+                if(TryUpdateModel(category))
+                {
+                    category.Groups.Add(group);
+                    db.SaveChanges();
+                }
+
                 return RedirectToAction("Index");
             }
             catch(Exception e)
             {
 
                 TempData["message"] = e.ToString();
-                return RedirectToAction("Index");
+                return View(group);
             }
         }
+
+        [Authorize(Roles = "user,moderator,admin")]
+        [HttpPost]
+        public ActionResult Join(int groupId, string userId)
+        {
+            var group = db.Groups.Find(groupId);
+            var user = db.Users.Find(userId);
+
+            if (TryUpdateModel(group))
+            {
+                group.Users.Add(user);
+                db.SaveChanges();
+            }
+
+            if (TryUpdateModel(user))
+            {
+                user.Groups.Add(group);
+                db.SaveChanges();   
+            }
+
+            var id = groupId;
+
+            return RedirectToAction("Show", new { id });
+        }
+
+        [HttpPost]
+        public ActionResult Search (string search)
+        {
+            var Groups = (from gr in db.Groups where gr.groupName.ToUpper().Contains(search.ToUpper()) select gr).ToList();
+
+            ViewBag.Groups = Groups;
+
+            if (User.IsInRole("user") || User.IsInRole("moderator") || User.IsInRole("admin"))
+            {
+                ViewBag.IsLogedIn = true;
+            }
+            else
+            {
+                ViewBag.IsLogedIn = false;
+            }
+
+            if (User.IsInRole("admin"))
+            {
+                ViewBag.UserRole = "admin";
+            }
+
+            return View("Index");
+        }
+
         [NonAction]
-        public IEnumerable<SelectListItem> GetAllGroups()
+        public IEnumerable<SelectListItem> GetAllCategories()
         {
             // generam o lista goala
             var selectList = new List<SelectListItem>();
 
             
-            var groups = from gr in db.Groups
-                             select gr;
-            foreach (var group in groups)
+            var categories = from category in db.Categories
+                             select category;
+            foreach (var category in categories)
             {
                 // Adaugam in lista elementele necesare pentru dropdown
                 selectList.Add(new SelectListItem
                 {
-                    Value = group.groupId.ToString(),
-                    Text = group.groupName.ToString()
+                    Value = category.CategoryId.ToString(),
+                    Text = category.Name.ToString()
                 });
             }
             return selectList;

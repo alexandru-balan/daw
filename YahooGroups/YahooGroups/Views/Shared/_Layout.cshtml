@@ -3,22 +3,25 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>@ViewBag.Title - My ASP.NET Application</title>
+    <title>@ViewBag.Title</title>
     @Styles.Render("~/Content/css")
     @Scripts.Render("~/bundles/modernizr")
 </head>
 <body>
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
-        @Html.ActionLink("Yahoo Groups", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
+        @Html.ActionLink("Yahoo Groups", "Index", "Home", new { area = "" }, new { @class = "navbar-brand", style = "color:#799DB0" })
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent">
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav mr-auto">
-                <li class="nav-item active">@Html.ActionLink("Home", "Index", "Home", new { @class = "nav-link" })</li>
-                <li class="nav-item">@Html.ActionLink("About", "About", "Home", new { @class = "nav-link" })</li>
-                <li class="nav-item">@Html.ActionLink("Contact", "Contact", "Home", new { @class = "nav-link" })</li>
-                
+                <li class="nav-item active">@Html.ActionLink("Home", "Index", "Home", new { }, new { @class = "nav-link" })</li>
+                <li class="nav-item">@Html.ActionLink("View Groups", "Index", "Group", new { }, new { @class = "nav-link" })</li>
+                @if (ViewBag.UserRole == "admin")
+                {
+                    <li class="nav-item">@Html.ActionLink("View Categories", "Index", "Category", new { }, new { @class = "nav-link" })</li>
+                    <li class="nav-item">@Html.ActionLink("Manage Users", "Index", "Identity", new { }, new { @class = "nav-link" })</li>
+                }
             </ul>
             @Html.Partial("_LoginPartial")
         </div>
@@ -27,7 +30,7 @@
         @RenderBody()
         <hr />
         <footer class="container-fluid">
-            <p>&copy; @DateTime.Now.Year - My ASP.NET Application</p>
+            <p>&copy; @DateTime.Now.Year - Yahoo Groups</p>
         </footer>
     </div>
 

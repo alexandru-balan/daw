@@ -1,0 +1,89 @@
+﻿@model YahooGroups.Models.ApplicationUser
+@{
+    ViewBag.Title = "User data";
+}
+
+<h1>@ViewBag.Title</h1>
+<p>-- @Model.Email --</p>
+<hr />
+
+<h3>The use is subscribed to the following groups:</h3>
+<br />
+@foreach (var group in Model.Groups)
+{
+    <div class="flex-row">
+        <span>@group.groupName: </span>
+        <span>@group.groupDescripiton</span>
+        @if (Model.Id == group.moderatorId)
+        {
+            <span> -- Moderator</span>
+            <a class="btn btn-light">Revoke as moderator of group</a>
+        }
+        else
+        {
+            <span> -- Normal User</span>
+            <a class="btn btn-light">Promote to moderator of group</a>
+        }
+    </div>
+}
+<br />
+<hr />
+
+@if (ViewBag.Role == "moderator")
+{
+    <form method="post" action="/Identity/RevokeModerator/@Model.Id">
+        @Html.HttpMethodOverride(HttpVerbs.Put)
+
+        <button class="btn btn-danger" type="submit">Revoke global moderator rights</button>
+    </form>
+    <br />
+
+    <form method="post" action="/Identity/MakeAdmin/Model.Id">
+        @Html.HttpMethodOverride(HttpVerbs.Put)
+
+        <button class="btn btn-success" type="submit">Grant admin right</button>
+    </form>
+    <br />
+
+    <form method="post" action="/Identity/Delete/@Model.Id">
+        @Html.HttpMethodOverride(HttpVerbs.Delete)
+
+        <button class="btn btn-danger" type="submit">Delete User</button>
+    </form>
+}
+
+@if (ViewBag.Role == "user")
+{
+    <form method="post" action="/Identity/MakeModerator/@Model.Id">
+        @Html.HttpMethodOverride(HttpVerbs.Put)
+
+        <button class="btn btn-success" type="submit">Grant global moderator rights</button>
+    </form>
+    <br />
+
+    <form method="post" action="/Identity/MakeAdmin/@Model.Id">
+        @Html.HttpMethodOverride(HttpVerbs.Put)
+
+        <button class="btn btn-success" type="submit">Grant admin right</button>
+    </form>
+    <br />
+
+    <form method="post" action="/Identity/Delete/@Model.Id">
+        @Html.HttpMethodOverride(HttpVerbs.Delete)
+
+        <button class="btn btn-danger" type="submit">Delete User</button>
+    </form>
+}
+
+@{
+    /*@if (ViewBag.Role == "admin")
+    {
+        <form method="post" action="/Identity/RevokeAdmin/@Model.Id">
+            @Html.HttpMethodOverride(HttpVerbs.Put)
+
+            <button class="btn btn-danger" type="submit">Revoke admin rights</button>
+        </form>
+        <br />
+    }*/
+}
+

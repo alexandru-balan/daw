@@ -32,7 +32,8 @@ namespace YahooGroups.Models
 
         
         public DbSet<GroupModels> Groups { get; set; }
-        
+        public DbSet<CommentModel> Comments { get; set; }
+        public DbSet<FileModel> Files { get; set; }
         public static ApplicationDbContext Create()
         {
             return new ApplicationDbContext();

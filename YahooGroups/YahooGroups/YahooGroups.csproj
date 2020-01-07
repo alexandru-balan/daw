@@ -336,6 +336,8 @@
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\CategoryController.cs" />
+    <Compile Include="Controllers\CommentController.cs" />
+    <Compile Include="Controllers\FileController.cs" />
     <Compile Include="Controllers\GroupController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\IdentityController.cs" />
@@ -531,6 +533,8 @@
     <Content Include="Views\Group\Delete.cshtml" />
     <Content Include="Views\Group\Show.cshtml" />
     <Content Include="Views\Identity\Show.cshtml" />
+    <Content Include="Views\Comment\Conversation.cshtml" />
+    <Content Include="Views\File\Show.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <TypeScriptCompile Include="Scripts\index.d.ts" />

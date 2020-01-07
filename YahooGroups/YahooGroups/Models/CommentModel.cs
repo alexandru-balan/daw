@@ -21,6 +21,6 @@ namespace YahooGroups.Models
         public int GroupId { get; set; }
 
         [Required]
-        public DateTime TimeStapm { get; set; } = DateTime.Now;
+        public DateTime TimeStamp { get; set; } = DateTime.Now;
     }
 }

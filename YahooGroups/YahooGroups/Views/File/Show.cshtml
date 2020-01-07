@@ -1,0 +1,35 @@
+﻿@model YahooGroups.Models.FileModel
+@{
+    ViewBag.Title = "Show";
+}
+<div>
+    <input type="file" name="filePath" />
+    <form method="post" action="#">
+        @Html.LabelFor(model => model.FileName)
+        @Html.EditorFor(model => model.FileName)
+        @Html.LabelFor(model => model.GroupID)
+        @Html.EditorFor(model => model.GroupID)
+        <button class="btn btn-primary" type="submit">Send</button>
+    </form>
+</div>
+
+@foreach (var file in ViewBag.Files)
+{
+    if (file.GroupID == ViewBag.GroupId)
+    {
+        foreach (var user in ViewBag.Users)
+        {
+            if (user.Id == file.userID)
+            {
+                <li class="nav-item ml-auto">
+                    <p>user.UserName + file.FileName</p>
+                </li>
+            }
+        }
+    }
+
+}
+
+
+<h2>Show</h2>
+

@@ -1,0 +1,36 @@
+﻿@model YahooGroups.Models.CommentModel
+@{
+    ViewBag.Title = "Conversation";
+}
+<div>
+    <label for="CommentContent">Your Comment:</label>
+    <textarea name="CommentContent" , rows="5" value=""></textarea>
+    <form method="post" action="#">
+        @Html.LabelFor(model => model.Content)
+        @Html.EditorFor(model => model.Content)
+        @Html.LabelFor(model => model.GroupId)
+        @Html.EditorFor(model => model.GroupId)
+        <button class="btn btn-primary" type="submit">Send</button>
+    </form>
+</div>
+
+@foreach (var com in ViewBag.Comments)
+{
+    if (com.GroupId == ViewBag.GroupId)
+    {
+        foreach (var user in ViewBag.Users)
+        {
+            if (user.Id == com.userId)
+            {
+                <li class="nav-item ml-auto">
+                    <p>user.UserName + com.Content</p>
+                </li>
+            }
+        }
+    }
+
+}
+
+
+<h2>Conversation</h2>
+

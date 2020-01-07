@@ -38,7 +38,14 @@ namespace YahooGroups.Controllers
             }
 
             var user = db.Users.Find(User.Identity.GetUserId());
-            ViewBag.CurrentUserGroups = user.Groups;
+            if (user == null)
+            {
+                ViewBag.CurrentUserGroups = new List<GroupModels>();
+            }
+            else
+            {
+                ViewBag.CurrentUserGroups = user.Groups;
+            }
 
             return View();
         }
@@ -76,7 +83,14 @@ namespace YahooGroups.Controllers
                 ViewBag.UserRole = "admin";
             }
 
-            ViewBag.CurrentUserGroups = user.Groups;
+            if (user == null)
+            {
+                ViewBag.CurrentUserGroups = new List<GroupModels>();
+            }
+            else
+            {
+                ViewBag.CurrentUserGroups = user.Groups;
+            }
 
             return View(group);
         }

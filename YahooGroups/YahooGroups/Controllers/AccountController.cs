@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Security.Claims;
@@ -17,6 +18,7 @@ namespace YahooGroups.Controllers
     {
         private ApplicationSignInManager _signInManager;
         private ApplicationUserManager _userManager;
+        private ApplicationDbContext db = new ApplicationDbContext();
 
         public AccountController()
         {
@@ -57,6 +59,26 @@ namespace YahooGroups.Controllers
         [AllowAnonymous]
         public ActionResult Login(string returnUrl)
         {
+            var user = db.Users.Find(User.Identity.GetUserId());
+
+            if (user == null)
+            {
+                ViewBag.CurrentUserGroups = new List<GroupModels>();
+            }
+            else
+            {
+                ViewBag.CurrentUserGroups = user.Groups;
+            }
+
+            if (!User.IsInRole("admin") && !User.IsInRole("moderator") && !User.IsInRole("user"))
+            {
+                ViewBag.IsLogedIn = false;
+            }
+            else
+            {
+                ViewBag.IsLogedIn = true;
+            }
+
             ViewBag.ReturnUrl = returnUrl;
             return View();
         }
@@ -96,6 +118,26 @@ namespace YahooGroups.Controllers
         [AllowAnonymous]
         public async Task<ActionResult> VerifyCode(string provider, string returnUrl, bool rememberMe)
         {
+            var user = db.Users.Find(User.Identity.GetUserId());
+
+            if (user == null)
+            {
+                ViewBag.CurrentUserGroups = new List<GroupModels>();
+            }
+            else
+            {
+                ViewBag.CurrentUserGroups = user.Groups;
+            }
+
+            if (!User.IsInRole("admin") && !User.IsInRole("moderator") && !User.IsInRole("user"))
+            {
+                ViewBag.IsLogedIn = false;
+            }
+            else
+            {
+                ViewBag.IsLogedIn = true;
+            }
+
             // Require that the user has already logged in via username/password or external login
             if (!await SignInManager.HasBeenVerifiedAsync())
             {
@@ -111,6 +153,26 @@ namespace YahooGroups.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> VerifyCode(VerifyCodeViewModel model)
         {
+            var user = db.Users.Find(User.Identity.GetUserId());
+
+            if (user == null)
+            {
+                ViewBag.CurrentUserGroups = new List<GroupModels>();
+            }
+            else
+            {
+                ViewBag.CurrentUserGroups = user.Groups;
+            }
+
+            if (!User.IsInRole("admin") && !User.IsInRole("moderator") && !User.IsInRole("user"))
+            {
+                ViewBag.IsLogedIn = false;
+            }
+            else
+            {
+                ViewBag.IsLogedIn = true;
+            }
+
             if (!ModelState.IsValid)
             {
                 return View(model);
@@ -139,6 +201,26 @@ namespace YahooGroups.Controllers
         [AllowAnonymous]
         public ActionResult Register()
         {
+            var user = db.Users.Find(User.Identity.GetUserId());
+
+            if (user == null)
+            {
+                ViewBag.CurrentUserGroups = new List<GroupModels>();
+            }
+            else
+            {
+                ViewBag.CurrentUserGroups = user.Groups;
+            }
+
+            if (!User.IsInRole("admin") && !User.IsInRole("moderator") && !User.IsInRole("user"))
+            {
+                ViewBag.IsLogedIn = false;
+            }
+            else
+            {
+                ViewBag.IsLogedIn = true;
+            }
+
             return View();
         }
 
@@ -149,6 +231,26 @@ namespace YahooGroups.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Register(RegisterViewModel model)
         {
+            var curruser = db.Users.Find(User.Identity.GetUserId());
+
+            if (curruser == null)
+            {
+                ViewBag.CurrentUserGroups = new List<GroupModels>();
+            }
+            else
+            {
+                ViewBag.CurrentUserGroups = curruser.Groups;
+            }
+
+            if (!User.IsInRole("admin") && !User.IsInRole("moderator") && !User.IsInRole("user"))
+            {
+                ViewBag.IsLogedIn = false;
+            }
+            else
+            {
+                ViewBag.IsLogedIn = true;
+            }
+
             if (ModelState.IsValid)
             {
                 var user = new ApplicationUser { UserName = model.Email, Email = model.Email };
@@ -178,6 +280,26 @@ namespace YahooGroups.Controllers
         [AllowAnonymous]
         public async Task<ActionResult> ConfirmEmail(string userId, string code)
         {
+            var curruser = db.Users.Find(User.Identity.GetUserId());
+
+            if (curruser == null)
+            {
+                ViewBag.CurrentUserGroups = new List<GroupModels>();
+            }
+            else
+            {
+                ViewBag.CurrentUserGroups = curruser.Groups;
+            }
+
+            if (!User.IsInRole("admin") && !User.IsInRole("moderator") && !User.IsInRole("user"))
+            {
+                ViewBag.IsLogedIn = false;
+            }
+            else
+            {
+                ViewBag.IsLogedIn = true;
+            }
+
             if (userId == null || code == null)
             {
                 return View("Error");
@@ -191,6 +313,26 @@ namespace YahooGroups.Controllers
         [AllowAnonymous]
         public ActionResult ForgotPassword()
         {
+            var curruser = db.Users.Find(User.Identity.GetUserId());
+
+            if (curruser == null)
+            {
+                ViewBag.CurrentUserGroups = new List<GroupModels>();
+            }
+            else
+            {
+                ViewBag.CurrentUserGroups = curruser.Groups;
+            }
+
+            if (!User.IsInRole("admin") && !User.IsInRole("moderator") && !User.IsInRole("user"))
+            {
+                ViewBag.IsLogedIn = false;
+            }
+            else
+            {
+                ViewBag.IsLogedIn = true;
+            }
+
             return View();
         }
 
@@ -201,6 +343,26 @@ namespace YahooGroups.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> ForgotPassword(ForgotPasswordViewModel model)
         {
+            var curruser = db.Users.Find(User.Identity.GetUserId());
+
+            if (curruser == null)
+            {
+                ViewBag.CurrentUserGroups = new List<GroupModels>();
+            }
+            else
+            {
+                ViewBag.CurrentUserGroups = curruser.Groups;
+            }
+
+            if (!User.IsInRole("admin") && !User.IsInRole("moderator") && !User.IsInRole("user"))
+            {
+                ViewBag.IsLogedIn = false;
+            }
+            else
+            {
+                ViewBag.IsLogedIn = true;
+            }
+
             if (ModelState.IsValid)
             {
                 var user = await UserManager.FindByNameAsync(model.Email);
@@ -227,6 +389,26 @@ namespace YahooGroups.Controllers
         [AllowAnonymous]
         public ActionResult ForgotPasswordConfirmation()
         {
+            var curruser = db.Users.Find(User.Identity.GetUserId());
+
+            if (curruser == null)
+            {
+                ViewBag.CurrentUserGroups = new List<GroupModels>();
+            }
+            else
+            {
+                ViewBag.CurrentUserGroups = curruser.Groups;
+            }
+
+            if (!User.IsInRole("admin") && !User.IsInRole("moderator") && !User.IsInRole("user"))
+            {
+                ViewBag.IsLogedIn = false;
+            }
+            else
+            {
+                ViewBag.IsLogedIn = true;
+            }
+
             return View();
         }
 
@@ -269,6 +451,26 @@ namespace YahooGroups.Controllers
         [AllowAnonymous]
         public ActionResult ResetPasswordConfirmation()
         {
+            var curruser = db.Users.Find(User.Identity.GetUserId());
+
+            if (curruser == null)
+            {
+                ViewBag.CurrentUserGroups = new List<GroupModels>();
+            }
+            else
+            {
+                ViewBag.CurrentUserGroups = curruser.Groups;
+            }
+
+            if (!User.IsInRole("admin") && !User.IsInRole("moderator") && !User.IsInRole("user"))
+            {
+                ViewBag.IsLogedIn = false;
+            }
+            else
+            {
+                ViewBag.IsLogedIn = true;
+            }
+
             return View();
         }
 
@@ -288,6 +490,26 @@ namespace YahooGroups.Controllers
         [AllowAnonymous]
         public async Task<ActionResult> SendCode(string returnUrl, bool rememberMe)
         {
+            var curruser = db.Users.Find(User.Identity.GetUserId());
+
+            if (curruser == null)
+            {
+                ViewBag.CurrentUserGroups = new List<GroupModels>();
+            }
+            else
+            {
+                ViewBag.CurrentUserGroups = curruser.Groups;
+            }
+
+            if (!User.IsInRole("admin") && !User.IsInRole("moderator") && !User.IsInRole("user"))
+            {
+                ViewBag.IsLogedIn = false;
+            }
+            else
+            {
+                ViewBag.IsLogedIn = true;
+            }
+
             var userId = await SignInManager.GetVerifiedUserIdAsync();
             if (userId == null)
             {
@@ -323,6 +545,26 @@ namespace YahooGroups.Controllers
         [AllowAnonymous]
         public async Task<ActionResult> ExternalLoginCallback(string returnUrl)
         {
+            var curruser = db.Users.Find(User.Identity.GetUserId());
+
+            if (curruser == null)
+            {
+                ViewBag.CurrentUserGroups = new List<GroupModels>();
+            }
+            else
+            {
+                ViewBag.CurrentUserGroups = curruser.Groups;
+            }
+
+            if (!User.IsInRole("admin") && !User.IsInRole("moderator") && !User.IsInRole("user"))
+            {
+                ViewBag.IsLogedIn = false;
+            }
+            else
+            {
+                ViewBag.IsLogedIn = true;
+            }
+
             var loginInfo = await AuthenticationManager.GetExternalLoginInfoAsync();
             if (loginInfo == null)
             {
@@ -401,6 +643,26 @@ namespace YahooGroups.Controllers
         [AllowAnonymous]
         public ActionResult ExternalLoginFailure()
         {
+            var curruser = db.Users.Find(User.Identity.GetUserId());
+
+            if (curruser == null)
+            {
+                ViewBag.CurrentUserGroups = new List<GroupModels>();
+            }
+            else
+            {
+                ViewBag.CurrentUserGroups = curruser.Groups;
+            }
+
+            if (!User.IsInRole("admin") && !User.IsInRole("moderator") && !User.IsInRole("user"))
+            {
+                ViewBag.IsLogedIn = false;
+            }
+            else
+            {
+                ViewBag.IsLogedIn = true;
+            }
+
             return View();
         }
 

@@ -33,7 +33,14 @@ namespace YahooGroups.Controllers
 
             var user = db.Users.Find(User.Identity.GetUserId());
 
-            ViewBag.CurrentUserGroups = user.Groups;
+            if (user == null)
+            {
+                ViewBag.CurrentUserGroups = new List<GroupModels>();
+            }
+            else
+            {
+                ViewBag.CurrentUserGroups = user.Groups;
+            }
 
             if (!User.IsInRole("admin") && !User.IsInRole("moderator") && !User.IsInRole("user"))
             {

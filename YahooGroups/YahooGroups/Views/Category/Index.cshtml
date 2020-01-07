@@ -3,13 +3,14 @@
     ViewBag.Title = "All Categories";
 }
 
-<h2>@ViewBag.Title</h2>
+<div class="jumbotron jumbotron-fluid" style="background-color:#293951">
+    <div class="container d-flex flex-column align-items-center">
+        <h1 style="color:white">Category management dashboard</h1>
+        <a class="btn btn-primary mt-4" href="/Category/New">Add Category</a>
+    </div>
+</div>
 
 @foreach (YahooGroups.Models.CategoryModel category in ViewBag.Categories)
 {
     @Html.Partial("DisplayCategoryPartialView", category)
 }
-<hr />
-<br />
-
-<a class="btn" href="/Category/New">Add Category</a>

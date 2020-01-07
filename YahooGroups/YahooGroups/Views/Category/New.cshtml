@@ -4,17 +4,22 @@
     ViewBag.Title = "Add a new category";
 }
 
-<h2>@ViewBag.Title</h2>
+<div class="jumbotron jumbotron-fluid">
+    <div class="container d-flex flex-column w-100 align-items-center">
+        <h1>Add a new category</h1>
+        <div class="d-flex flex-row align-items-center w-50 justify-content-center">
+            <form method="post" action="/Category/New">
 
-<form method="post" action="/Category/New">
+                @Html.ValidationSummary(false, "", new { @class = "text-danger" })
 
-    @Html.ValidationSummary(false, "", new { @class = "text-danger" })
+                @Html.HiddenFor(model => model.CategoryId)
 
-    @Html.HiddenFor(model => model.CategoryId)
+                @Html.Label("Name", "Category Name")
 
-    @Html.Label("Name", "Category Name")
+                @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "border-0 bg-white rounded" ,style = "height:2rem" } })
 
-    @Html.EditorFor(model => model.Name)
-
-    <button type="submit" class="btn">Create category</button>
-</form>
+                <button type="submit" class="btn btn-success">Add</button>
+            </form>
+        </div>
+    </div>
+</div>

@@ -168,7 +168,7 @@ namespace YahooGroups.Controllers
                         db.SaveChanges();
                         TempData["message"] = "Category updated successfully!";
                     }
-                    return RedirectToAction("Show", new { categoryId = id });
+                    return RedirectToAction("Show", new { id });
                 }
                 else
                 {

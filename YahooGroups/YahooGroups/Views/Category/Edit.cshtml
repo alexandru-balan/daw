@@ -4,20 +4,29 @@
     ViewBag.Title = "Edit category";
 }
 
-<h2>@ViewBag.Title</h2>
+<div class="jumbotron jumbotron-fluid" style="background-color:#974a58">
+    <div class="container-fluid">
+        <h1 class="text-center" style="color:#ECF1EE">Edit category: @Model.Name</h1>
+    </div>
+</div>
 
-<form method="post" action="/Category/Edit/@Model.CategoryId">
+<div class="vw-100 d-flex flex-row align-items-center justify-content-around">
+    <img class="w-25" src="~/Assets/Groups/FormFill.svg" />
 
-    @Html.HttpMethodOverride(HttpVerbs.Put)
+    <form class="w-50" method="post" action="/Category/Edit/@Model.CategoryId">
 
-    @Html.ValidationSummary(false, "", new { @class = "text-danger" })
+        @Html.HttpMethodOverride(HttpVerbs.Put)
 
-    @Html.HiddenFor(model => model.CategoryId)
+        @Html.ValidationSummary(false, "", new { @class = "text-danger" })
 
-    @Html.LabelFor(model => model.Name, "Category Name")
-    <br />
-    @Html.EditorFor(model => model.Name)
-    <br />
+        @Html.HiddenFor(model => model.CategoryId)
 
-    <button type="submit" class="btn">Update category info</button>
-</form>
+        @Html.LabelFor(model => model.Name, "Category Name")
+        <br />
+        @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control" } })
+        <br />
+
+        <button type="submit" class="btn btn-success">Update category info</button>
+    </form>
+</div>
+

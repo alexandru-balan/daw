@@ -10,7 +10,9 @@
     </div>
 </div>
 
-@foreach (YahooGroups.Models.CategoryModel category in ViewBag.Categories)
-{
-    @Html.Partial("DisplayCategoryPartialView", category)
-}
+<div class="container d-flex flex-column align-items-center" style="width:90vw;">
+    @foreach (YahooGroups.Models.CategoryModel category in ViewBag.Categories)
+    {
+        @Html.Partial("DisplayCategoryPartialView", category)
+    }
+</div>

@@ -1,4 +1,5 @@
-﻿using System.Data.Entity;
+﻿using System.Collections.Generic;
+using System.Data.Entity;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNet.Identity;
@@ -16,6 +17,8 @@ namespace YahooGroups.Models
             // Add custom user claims here
             return userIdentity;
         }
+
+        public virtual ICollection<GroupModels> Groups { get; set; } = new List<GroupModels>();
     }
 
     public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
@@ -24,9 +27,13 @@ namespace YahooGroups.Models
             : base("DefaultConnection", throwIfV1Schema: false)
         {
         }
+
+        public DbSet<CategoryModel> Categories { get; set; }
+
         
         public DbSet<GroupModels> Groups { get; set; }
-        
+        public DbSet<CommentModel> Comments { get; set; }
+        public DbSet<FileModel> Files { get; set; }
         public static ApplicationDbContext Create()
         {
             return new ApplicationDbContext();

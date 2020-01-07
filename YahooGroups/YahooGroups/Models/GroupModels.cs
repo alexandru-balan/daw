@@ -11,17 +11,22 @@ namespace YahooGroups.Models
     {
         [Key]
         public int groupId { get; set; }
-        [Required]
+
+        [Required(ErrorMessage = "You must provide a group name")]
         public string groupName { get; set; }
+
         public string groupDescripiton { get; set; }
-        [Required]
-        public int moderatorId { get; set; }
-        public virtual ICollection<ApplicationUser> ApplicationUser { get; set; }
-    }
-    public class GroupDBContext: DbContext
-    {
-        public GroupDBContext()
-        { }
-        public DbSet<GroupModels> Groups { get; set; }
+
+        public string moderatorId { get; set; }
+
+        public virtual ICollection<ApplicationUser> Users { get; set; } = new List<ApplicationUser>();
+
+        [Required(ErrorMessage = "You must pick one category")]
+        public int CategoryId { get; set; }
+
+        public bool privateGroup { get; set; }
+
+        public virtual ICollection<CommentModel> Comments { get; set; } = new List<CommentModel>();
+        public virtual ICollection<FileModel> Files { get; set; } = new List<FileModel>();
     }
 }
